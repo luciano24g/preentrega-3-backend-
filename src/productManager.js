@@ -1,104 +1,52 @@
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { loadProductsFromFile, saveProductsToFile } from './fileHandler.mjs';
 
 class ProductManager {
   constructor() {
-    this.path = path.join(__dirname, '../productos.json');
-    this.products = [];
-    this.productIdCounter = 1;
-    this.loadProducts();
+    this.products = loadProductsFromFile('products.json');
   }
 
-  loadProducts() {
-    try {
-      const data = fs.readFileSync(this.path, 'utf8');
-      this.products = JSON.parse(data);
-      if (this.products.length > 0) {
-        this.productIdCounter = Math.max(...this.products.map(product => product.id)) + 1;
-      }
-    } catch (err) {
-      console.error('Error al cargar productos:', err.message);
+  getProducts(limit) {
+    if (limit) {
+      return this.products.slice(0, limit);
     }
-  }
-
-  saveProducts() {
-    try {
-      const data = JSON.stringify(this.products);
-      fs.writeFileSync(this.path, data);
-    } catch (err) {
-      console.error('Error al guardar productos:', err.message);
-    }
-  }
-
-  addProduct(productData) {
-    if (
-      !productData.title ||
-      !productData.description ||
-      !productData.price ||
-      !productData.thumbnail ||
-      !productData.code ||
-      !productData.stock
-    ) {
-      console.error('Todos los campos son obligatorios.');
-      return;
-    }
-
-    const codeExists = this.products.some(product => product.code === productData.code);
-    if (codeExists) {
-      console.error('El código del producto ya existe.');
-      return;
-    }
-
-    const newProduct = {
-      id: this.productIdCounter++,
-      title: productData.title,
-      description: productData.description,
-      price: productData.price,
-      thumbnail: productData.thumbnail,
-      code: productData.code,
-      stock: productData.stock,
-    };
-
-    this.products.push(newProduct);
-    console.log('Producto agregado:', newProduct);
-    this.saveProducts(); // Guarda los productos después de agregar uno nuevo
-  }
-
-  getProducts() {
     return this.products;
   }
 
   getProductById(productId) {
-    const product = this.products.find(product => product.id === productId);
-    if (product) {
-      return product;
-    } else {
-      console.error('Producto no encontrado');
-    }
+    return this.products.find(product => product.id === productId);
   }
 
-  updateProduct(productId, updatedData) {
-    const productIndex = this.products.findIndex(product => product.id === productId);
-    if (productIndex !== -1) {
-      this.products[productIndex] = { ...this.products[productIndex], ...updatedData };
-      this.saveProducts(); // Guarda los productos después de actualizar uno
-    } else {
-      console.error('Producto no encontrado');
+  addProduct(newProduct) {
+    const productId = this.generateProductId();
+    const product = { id: productId, ...newProduct };
+    this.products.push(product);
+    saveProductsToFile('products.json', this.products);
+    return product;
+  }
+
+  updateProduct(productId, updatedProduct) {
+    const index = this.products.findIndex(product => product.id === productId);
+    if (index !== -1) {
+      this.products[index] = { id: productId, ...updatedProduct };
+      saveProductsToFile('products.json', this.products);
+      return this.products[index];
     }
+    return null;
   }
 
   deleteProduct(productId) {
-    const productIndex = this.products.findIndex(product => product.id === productId);
-    if (productIndex !== -1) {
-      this.products.splice(productIndex, 1);
-      this.saveProducts(); // Guarda los productos después de eliminar uno
-    } else {
-      console.error('Producto no encontrado');
+    const index = this.products.findIndex(product => product.id === productId);
+    if (index !== -1) {
+      const deletedProduct = this.products.splice(index, 1);
+      saveProductsToFile('products.json', this.products);
+      return deletedProduct[0];
     }
+    return null;
+  }
+
+  generateProductId() {
+    const lastProductId = this.products.length > 0 ? this.products[this.products.length - 1].id : 0;
+    return lastProductId + 1;
   }
 }
 

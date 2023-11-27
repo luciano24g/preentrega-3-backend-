@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 function loadProductsFromFile(filePath) {
   try {
@@ -19,4 +19,4 @@ function saveProductsToFile(filePath, products) {
   }
 }
 
-module.exports = { loadProductsFromFile, saveProductsToFile };
+export { loadProductsFromFile, saveProductsToFile };
