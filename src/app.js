@@ -6,12 +6,12 @@ import cartsRouter from './cartsRouter.js';
 const app = express();
 const port = 8080;
 
-app.use(bodyParser.json()); // Middleware para manejar datos JSON
+app.use(bodyParser.json()); 
 
-// Rutas para el manejo de productos
+
 app.use('/api/products', productsRouter);
 
-// Rutas para el manejo de carritos
+
 app.use('/api/carts', cartsRouter);
 
 app.listen(port, () => {

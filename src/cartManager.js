@@ -25,7 +25,7 @@ class CartManager {
           cart.products.push({ id: productId, quantity });
         }
   
-        // Implementar la persistencia del carrito si es necesario
+       
   
         return cart;
       }
