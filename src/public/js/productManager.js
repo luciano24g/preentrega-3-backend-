@@ -1,8 +1,28 @@
-import { loadProductsFromFile, saveProductsToFile } from './fileHandler.mjs';
+const fs = require('fs');
 
 class ProductManager {
   constructor() {
-    this.products = loadProductsFromFile('products.json');
+    this.filePath = 'products.json';
+    this.products = this.loadProductsFromFile();
+  }
+
+  loadProductsFromFile() {
+    try {
+      const data = fs.readFileSync(this.filePath, 'utf8');
+      return JSON.parse(data);
+    } catch (err) {
+      console.error('Error loading products:', err.message);
+      return [];
+    }
+  }
+
+  saveProductsToFile() {
+    try {
+      const data = JSON.stringify(this.products);
+      fs.writeFileSync(this.filePath, data);
+    } catch (err) {
+      console.error('Error saving products:', err.message);
+    }
   }
 
   getProducts(limit) {
@@ -20,7 +40,7 @@ class ProductManager {
     const productId = this.generateProductId();
     const product = { id: productId, ...newProduct };
     this.products.push(product);
-    saveProductsToFile('products.json', this.products);
+    this.saveProductsToFile();
     return product;
   }
 
@@ -28,7 +48,7 @@ class ProductManager {
     const index = this.products.findIndex(product => product.id === productId);
     if (index !== -1) {
       this.products[index] = { id: productId, ...updatedProduct };
-      saveProductsToFile('products.json', this.products);
+      this.saveProductsToFile();
       return this.products[index];
     }
     return null;
@@ -38,7 +58,7 @@ class ProductManager {
     const index = this.products.findIndex(product => product.id === productId);
     if (index !== -1) {
       const deletedProduct = this.products.splice(index, 1);
-      saveProductsToFile('products.json', this.products);
+      this.saveProductsToFile();
       return deletedProduct[0];
     }
     return null;
@@ -50,4 +70,4 @@ class ProductManager {
   }
 }
 
-export default ProductManager;
+module.exports = ProductManager;

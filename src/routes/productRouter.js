@@ -1,8 +1,13 @@
-import express from 'express';
-import ProductManager from './productManager.js';
+const express = require('express');
+const ProductManager = require('../public/js/productManager.js');
 
 const router = express.Router();
 const productManager = new ProductManager();
+
+// Middleware para analizar el cuerpo de solicitudes JSON
+router.use(express.json());
+
+// Rutas
 
 router.get('/', (req, res, next) => {
   try {
@@ -70,4 +75,4 @@ router.delete('/:pid', (req, res, next) => {
   }
 });
 
-export default router;
+module.exports = router;
