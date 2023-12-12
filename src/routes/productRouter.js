@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
   try {
     const limit = req.query.limit;
     const products = productManager.getProducts(limit);
-    res.json(products);
+    res.render('home', { products });
   } catch (error) {
     next(error);
   }
@@ -25,7 +25,7 @@ router.get('/:pid', (req, res, next) => {
     const product = productManager.getProductById(productId);
 
     if (product) {
-      res.json(product);
+      res.render('productDetail', { product }); // Renderiza la vista 'productDetail' con el producto específico
     } else {
       res.status(404).json({ error: 'Product not found' });
     }

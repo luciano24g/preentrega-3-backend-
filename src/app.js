@@ -12,9 +12,9 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer);
 
 // Configuración de Handlebars
-app.engine('.hbs', engine());
-app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname, 'views'));
+app.engine('.handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views')); // Asegúrate de que la carpeta 'views' exista
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -45,6 +45,11 @@ io.on('connection', (socket) => {
       message: data,
     };
     messages = [...messages, newMessage];
+    io.emit('chat-messages-update', messages);
+  });
+
+  // Lógica del cliente Socket.IO
+  socket.on('chat-messages-update', (messages) => {
     io.emit('chat-messages-update', messages);
   });
 });
