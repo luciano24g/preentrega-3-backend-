@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
   try {
     const limit = req.query.limit;
     const products = productManager.getProducts(limit);
-    res.render('home', { products });
+    res.json({ products }); // Enviar productos como JSON
   } catch (error) {
     next(error);
   }

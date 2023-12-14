@@ -2,23 +2,33 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const http = require('http');
 const path = require('path');
-const viewRouter = require('./routes/productRouter.js');
-const { Server } = require('socket.io');
+const viewsRouter = require('./routes/viewsRouter');
+const productsRouter = require('./routes/productRouter');
+const socketIo = require('socket.io');  // Agrega la importación de 'socket.io'
 
 const PORT = 8080;
 let messages = [];
 const app = express();
 const httpServer = http.createServer(app);
-const io = new Server(httpServer);
 
 // Configuración de Handlebars
 app.engine('.handlebars', engine());
 app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, 'views')); // Asegúrate de que la carpeta 'views' exista
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', viewRouter);
+// Agrega el enrutador de productos bajo '/api'
+app.use('/api', productsRouter);
+
+// Agrega el enrutador de vistas bajo '/'
+app.use('/', viewsRouter);
+
+
+
+// Configuración de Socket.IO
+const io = socketIo(httpServer);
+app.set('socketio', io);
 
 io.on('connection', (socket) => {
   console.log('New client connected');
