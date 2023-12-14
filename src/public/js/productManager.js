@@ -6,6 +6,14 @@ class ProductManager {
     this.products = this.loadProductsFromFile();
   }
 
+  getProductsForView(limit) {
+    const allProducts = this.getProducts(limit);
+    return allProducts.map(product => ({
+      title: product.title,
+      price: product.price
+    }));
+  }
+
   loadProductsFromFile() {
     try {
       const data = fs.readFileSync(this.filePath, 'utf8');

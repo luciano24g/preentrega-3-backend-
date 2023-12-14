@@ -13,8 +13,10 @@ router.get('/', (req, res, next) => {
   try {
     const limit = req.query.limit;
     const products = productManager.getProducts(limit);
-    res.json({ products }); // Enviar productos como JSON
+    console.log('Products in productRouter:', products); // Agrega este console.log
+    res.render('home', { products });
   } catch (error) {
+    console.error('Error:', error);
     next(error);
   }
 });
@@ -38,7 +40,9 @@ router.post('/', (req, res, next) => {
   try {
     const newProduct = req.body;
     const createdProduct = productManager.addProduct(newProduct);
+    io.emit('actualizarLista', productManager.getProducts());
     res.status(201).json(createdProduct);
+  
   } catch (error) {
     next(error);
   }

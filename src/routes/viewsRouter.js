@@ -1,11 +1,15 @@
-// routes/viewsRouter.js
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const ProductManager = require('../public/js/productManager.js');
+const productManager = new ProductManager();
 
 // Ruta para renderizar la vista principal
 router.get('/', (req, res) => {
-  res.render('home');
+  const limit = req.query.limit;
+  const products = productManager.getProducts(limit);
+  console.log('Products in viewsRouter:', products); // Agrega este console.log
+  res.render('home', { products });
 });
 
 // Ruta para renderizar la vista de productos en tiempo real
