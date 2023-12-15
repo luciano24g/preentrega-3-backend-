@@ -14,7 +14,12 @@ router.get('/', (req, res) => {
 
 // Ruta para renderizar la vista de productos en tiempo real
 router.get('/realTimeProducts', (req, res) => {
-  res.render('realTimeProducts');
+  // Asegúrate de ajustar el límite según tus necesidades
+  const productList = productManager.getProductsForView(10);
+
+  // Renderiza la vista 'realTimeProducts' con la lista de productos
+  res.render('realTimeProducts', { productList });
 });
+
 
 module.exports = router;
