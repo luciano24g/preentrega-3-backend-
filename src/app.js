@@ -3,7 +3,10 @@ const { engine } = require('express-handlebars');
 const http = require('http');
 const path = require('path');
 const viewsRouter = require('./routes/viewsRouter');
-const productsRouter = require('./routes/productRouter');
+const { router: productsRouter, productManager } = require('./routes/productRouter');
+
+ // <-- Asegúrate de importar productManager
+
 const socketIo = require('socket.io');
 
 const PORT = 8080;
@@ -32,20 +35,22 @@ app.set('socketio', io);
 
 io.on('connection', (socket) => {
   console.log('New client connected');
-  const productManager = require('./public/js/productManager.js');
+  const ProductManager = require('./productManager.js');
+  const productManager = new ProductManager();
+  
+  // Mover la definición de productList aquí
   const productList = productManager.getProducts();
+
   socket.emit('actualizarLista', productList);
 
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });
-
   // Emitir mensaje al cliente conectado
   socket.emit('connected-message', 'Cliente conectado');
 
   // Lógica para enviar la lista de productos al cliente
-  socket.emit('products-update', getProductList());
-
+  socket.emit('products-update', productManager.getProducts());
   socket.on('message', (data) => {
     console.log(data);
   });
@@ -75,7 +80,7 @@ io.on('connection', (socket) => {
   // Lógica del cliente Socket.IO para actualizar productos
   socket.on('update-products', () => {
     // Enviar la lista actualizada de productos a todos los clientes
-    io.emit('products-update', getProductList());
+    io.emit('products-update', productManager.getProducts());
   });
 });
 

@@ -1,9 +1,8 @@
 const express = require('express');
-const ProductManager = require('../public/js/productManager.js');
+const ProductManager = require('../productManager');
 
 const router = express.Router();
 const productManager = new ProductManager();
-
 // Middleware para analizar el cuerpo de solicitudes JSON
 router.use(express.json());
 
@@ -79,4 +78,4 @@ router.delete('/:pid', (req, res, next) => {
   }
 });
 
-module.exports = router;
+module.exports = { router, productManager };

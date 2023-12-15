@@ -19,11 +19,10 @@ class ProductManager {
       const data = fs.readFileSync(this.filePath, 'utf8');
       return JSON.parse(data);
     } catch (err) {
-      console.error('Error loading products:', err.message);
+      console.error(`Error loading products from ${this.filePath}:`, err.message);
       return [];
     }
   }
-
   saveProductsToFile() {
     try {
       const data = JSON.stringify(this.products);
@@ -34,6 +33,7 @@ class ProductManager {
   }
 
   getProducts(limit) {
+    // Lógica para obtener productos
     if (limit) {
       return this.products.slice(0, limit);
     }

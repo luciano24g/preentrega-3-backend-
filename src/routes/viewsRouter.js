@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const ProductManager = require('../public/js/productManager.js');
+const ProductManager = require('../productManager');
 const productManager = new ProductManager();
 
 // Ruta para renderizar la vista principal
