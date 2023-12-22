@@ -1,5 +1,6 @@
 const express = require('express');
 const ProductManager = require('../productManager');
+const Message = require('../dao/models/Message');
 
 const router = express.Router();
 const productManager = new ProductManager();
@@ -74,6 +75,26 @@ router.delete('/:pid', (req, res, next) => {
       res.status(404).json({ error: 'Product not found' });
     }
   } catch (error) {
+    next(error);
+  }
+});
+router.post('/message', async (req, res, next) => {
+  try {
+    const { user, message } = req.body;
+
+    // Crear una instancia del modelo de mensajes
+    const newMessage = new Message({
+      user,
+      message
+    });
+
+    // Guardar el mensaje en la base de datos
+    const savedMessage = await newMessage.save();
+
+    // Responder con el mensaje guardado
+    res.status(201).json(savedMessage);
+  } catch (error) {
+    console.error('Error al guardar el mensaje:', error);
     next(error);
   }
 });

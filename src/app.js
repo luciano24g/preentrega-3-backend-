@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
         };
 
         // Guardar el mensaje en MongoDB
-        await Message.create(newMessage);
+        await Messages.create(newMessage);
 
         // Obtener todos los mensajes y enviarlos a todos los clientes
         const messages = await Message.find();
