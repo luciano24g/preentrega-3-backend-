@@ -7,7 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos</title>
     <style>
-        /* Estilos para las tarjetas */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
         .product-card {
             border: 1px solid #e0e0e0;
             border-radius: 8px;
@@ -32,7 +59,7 @@
         }
 
         /* Estilos para el botón agregar al carrito */
-        .add-to-cart-btn {
+        .add-to-cart-button{
             background-color: #007bff;
             color: white;
             padding: 8px 16px;
@@ -42,13 +69,28 @@
             transition: background-color 0.3s ease-in-out;
         }
 
-        .add-to-cart-btn:hover {
+        .add-to-cart-button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 
 <body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/chat">Chat</a></li>
+            <li><a href="/cart">Carrito</a></li>
+             <li><a href="/products">productos</a></li>
+            
+            
+
+            <!-- Puedes agregar más elementos de la navbar según lo necesites -->
+        </ul>
+    </nav>
+
+
+
     <h1>Productos</h1>
 
     <!-- Filtro para cambiar las categorías -->
@@ -73,7 +115,8 @@
             <p>Precio: ${{precio}}</p>
             <p>Stock: {{stock}}</p>
             <!-- Botón para agregar al carrito -->
-            <button class="add-to-cart-btn" data-product-id="{{_id}}">Agregar al carrito</button>
+           <button class="add-to-cart-button" data-product-id="{{this._id}}">Agregar al carrito</button>
+
             <!-- Añade más detalles si es necesario -->
         </div>
         {{/each}}

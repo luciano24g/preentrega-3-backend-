@@ -12,7 +12,7 @@ const socketIo = require('socket.io');
 const PORT = 8080;
 const app = express();
 const httpServer = http.createServer(app);
-
+let cartProducts = [];
 // Middleware para parsear el cuerpo de la solicitud en formato JSON
 app.use(express.json());
 

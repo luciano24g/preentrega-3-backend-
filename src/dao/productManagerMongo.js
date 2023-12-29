@@ -58,9 +58,17 @@ class ProductManagerMongo {
   // Método para ordenar productos por precio
   async getProductsSortedByPrice(order = 'asc', page = 1, limit = 10) {
     try {
+      console.log(`Orden solicitado: ${order}, Página: ${page}, Límite: ${limit}`);
+  
       const skip = (page - 1) * limit;
+      console.log(`Saltar: ${skip}`);
+  
       const sortOrder = (order === 'desc') ? -1 : 1;
+      console.log(`Ordenar: ${sortOrder}`);
+  
       const products = await Product.find().sort({ precio: sortOrder }).skip(skip).limit(limit);
+      console.log(`Productos encontrados: ${products.length}`);
+  
       return products;
     } catch (error) {
       console.error('Error al obtener productos ordenados por precio:', error.message);
