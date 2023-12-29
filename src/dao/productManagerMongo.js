@@ -27,7 +27,7 @@ class ProductManagerMongo {
   // Método para filtrar productos por categoría
   async getProductsByCategory(category) {
     try {
-      const products = await Product.find({ category: category });
+      const products = await Product.find({ tipo: category });
       return products;
     } catch (error) {
       console.error('Error al obtener productos por categoría:', error.message);
@@ -46,11 +46,21 @@ class ProductManagerMongo {
       return [];
     }
   }
-
-  // Método para ordenar productos por precio
-  async getProductsSortedByPrice(order = 'asc') {
+  async getProductsByTipo(tipo) {
     try {
-      const products = await Product.find().sort({ price: order });
+      const products = await Product.find({ tipo: tipo });
+      return products;
+    } catch (error) {
+      console.error('Error al obtener productos por tipo:', error.message);
+      return [];
+    }
+  }
+  // Método para ordenar productos por precio
+  async getProductsSortedByPrice(order = 'asc', page = 1, limit = 10) {
+    try {
+      const skip = (page - 1) * limit;
+      const sortOrder = (order === 'desc') ? -1 : 1;
+      const products = await Product.find().sort({ precio: sortOrder }).skip(skip).limit(limit);
       return products;
     } catch (error) {
       console.error('Error al obtener productos ordenados por precio:', error.message);

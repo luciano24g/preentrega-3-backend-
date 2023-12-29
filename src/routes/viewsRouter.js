@@ -35,14 +35,14 @@ router.get('/products', async (req, res) => {
 });
 
 // Ruta para obtener productos por categoría
-router.get('/products/category/:category', async (req, res) => {
+router.get('/products/tipo/:tipo', async (req, res) => {
   try {
-    const category = req.params.category;
-    const products = await productManagerMongo.getProductsByCategory(category);
-    res.render('products', { products });
+      const tipo = req.params.tipo;
+      const products = await productManagerMongo.getProductsByTipo(tipo); // Asume que tienes un método para filtrar por tipo en tu ProductManagerMongo
+      res.render('products', { products });
   } catch (error) {
-    console.error('Error al cargar productos por categoría:', error.message);
-    res.status(500).send('Error al cargar los productos.');
+      console.error('Error al cargar productos por tipo:', error.message);
+      res.status(500).send('Error al cargar los productos.');
   }
 });
 
@@ -58,11 +58,12 @@ router.get('/products/page/:page', async (req, res) => {
   }
 });
 
-// Ruta para obtener productos ordenados por precio
-router.get('/products/sorted/:order', async (req, res) => {
+// Ruta para obtener productos ordenados por precio con paginación
+router.get('/products/order/:order/:page', async (req, res) => {
   try {
     const order = req.params.order; // Puede ser 'asc' o 'desc'
-    const products = await productManagerMongo.getProductsSortedByPrice(order);
+    const page = parseInt(req.params.page);
+    const products = await productManagerMongo.getProductsSortedByPrice(order, page);
     res.render('products', { products });
   } catch (error) {
     console.error('Error al cargar productos ordenados:', error.message);

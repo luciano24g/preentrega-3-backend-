@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const productList = document.getElementById('productList');
   const paginationDiv = document.getElementById('pagination'); // Nuevo elemento para la paginación
 
-  // Función para obtener productos filtrados por categoría y página
-  const fetchProductsByCategoryAndPage = async (category, page) => {
-      const response = await fetch(`/api/products/category/${category}?page=${page}`);
+  // Función para obtener productos filtrados por tipo y página
+  const fetchProductsByTipoAndPage = async (tipo, page) => {
+      const response = await fetch(`/api/products/tipo/${tipo}?page=${page}`);
       const products = await response.json();
       renderProducts(products);
   };
@@ -28,34 +28,30 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Función para renderizar los botones de paginación
-  const renderPagination = (totalPages, selectedCategory) => {
-      paginationDiv.innerHTML = '';
-      for (let i = 1; i <= totalPages; i++) {
-          const button = document.createElement('button');
-          button.innerText = i;
-          button.addEventListener('click', () => {
-              fetchProductsByCategoryAndPage(selectedCategory, i);
-          });
-          paginationDiv.appendChild(button);
-      }
+  const renderPagination = (totalPages, tipo) => {
+    paginationDiv.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.innerText = i;
+        button.addEventListener('click', () => {
+            fetchProductsByTipoAndPage(tipo, i);
+        });
+        paginationDiv.appendChild(button);
+    }
   };
 
-  // Event listener para el cambio de categoría
+  // Event listener para el cambio de tipo
   categoryFilter.addEventListener('change', (event) => {
-      const selectedCategory = event.target.value;
-      if (selectedCategory === 'all') {
-          // Si se selecciona "Todos", simplemente carga todos los productos
-          // Aquí deberías implementar la función para obtener todos los productos paginados si lo necesitas
-      } else {
-          // Si se selecciona una categoría específica, filtra los productos por esa categoría y muestra la paginación
-          // Suponiendo que conoces el número total de páginas para la categoría seleccionada
-          const totalPages = 5; // A modo de ejemplo, deberías calcular el número real de páginas
-          renderPagination(totalPages, selectedCategory);
-          fetchProductsByCategoryAndPage(selectedCategory, 1);
-      }
+    const selectedTipo = event.target.value; 
+    if (selectedTipo === 'all') {
+        // Si se selecciona "Todos", simplemente carga todos los productos
+        window.location.href = '/products';
+    } else {
+      window.location.href = `/products/tipo/${selectedTipo}`;
+    }
   });
 
-  // Inicialmente, carga todos los productos (esto es solo un ejemplo inicial, ajusta según tus necesidades)
+  // Inicialmente, carga todos los productos
   const fetchInitialProducts = async () => {
       const response = await fetch('/api/products');
       const products = await response.json();
