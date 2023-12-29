@@ -2,11 +2,11 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const http = require('http');
 const path = require('path');
-const mongoose = require('./db'); // Asegúrate de tener este archivo de conexión
+const dbConnection = require('./db.js');  // Importa la conexión de MongoDB desde src/db.js
 const viewsRouter = require('./routes/viewsRouter');
-const { router: productsRouter } = require('./routes/productRouter'); // Modificado para solo router
-const productManagerMongo = require('./dao/productManagerMongo');
-const Message = require('./dao/models/Message'); // Importa el modelo de Message
+const { router: productsRouter } = require('./routes/productRouter');
+const productManagerMongo = require('./dao/ProductManagerMongo.js');
+const Message = require('./dao/models/Message');  // Asegúrate de que esta ruta sea correcta
 const socketIo = require('socket.io');
 
 const PORT = 8080;
@@ -17,7 +17,12 @@ const httpServer = http.createServer(app);
 app.use(express.json());
 
 // Configuración de Handlebars
-app.engine('.handlebars', engine());
+app.engine('.handlebars', engine({
+  runtimeOptions: {
+    allowProtoMethodsByDefault: true,
+    allowProtoPropertiesByDefault: true,
+  },
+}));
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -25,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Agrega el enrutador de productos bajo '/api'
 app.use('/api', productsRouter);
-app.use('/', viewsRouter);
+app.use('/', viewsRouter);  // Asegúrate de que esta ruta maneje la vista de productos
 
 // Configuración de Socket.IO
 const io = socketIo(httpServer);
@@ -33,7 +38,7 @@ app.set('socketio', io);
 
 io.on('connection', (socket) => {
   console.log('New client connected');
-  const productList = productManagerMongo.getProducts(); 
+  const productList = productManagerMongo.getProducts();
 
   socket.emit('actualizarLista', productList);
 
@@ -45,7 +50,7 @@ io.on('connection', (socket) => {
         };
 
         // Guardar el mensaje en MongoDB
-        await Messages.create(newMessage);
+        await Message.create(newMessage);
 
         // Obtener todos los mensajes y enviarlos a todos los clientes
         const messages = await Message.find();
@@ -55,6 +60,15 @@ io.on('connection', (socket) => {
         console.error('Error al procesar el mensaje de chat:', error.message);
     }
   });
+});
+
+// Verificar si la conexión a MongoDB está activa antes de iniciar el servidor
+dbConnection.once('open', () => {
+  console.log(`Conexión a MongoDB activa. Servidor funcionando en el puerto: ${PORT}`);
+});
+
+dbConnection.on('error', (error) => {
+  console.error('Error en conexión a MongoDB:', error.message);
 });
 
 // Iniciar el servidor HTTP

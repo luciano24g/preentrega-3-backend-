@@ -1,0 +1,88 @@
+<!-- views/products.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <style>
+        /* Estilos para las tarjetas */
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .product-card p {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+
+        /* Estilos para el botón agregar al carrito */
+        .add-to-cart-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Productos</h1>
+
+    <!-- Filtro para cambiar las categorías -->
+    <select id="categoryFilter">
+        <option value="all">Todos</option>
+        <option value="buzo">Buzos</option>
+        <option value="camisa">Camisas</option>
+        <option value="pantalon">Pantalones</option>
+        <!-- Agrega más opciones según tus categorías -->
+    </select>
+    <div id="pagination">
+    <!-- Aquí se generará el código de los botones de paginación dinámicamente -->
+    </div>
+
+    <!-- Contenedor para los productos -->
+    <div id="productList">
+        {{#each products}}
+        <div class="product-card">
+            <h2>{{nombre}}</h2>
+            <p>{{descripcion}}</p>
+            <p>Precio: ${{precio}}</p>
+            <p>Stock: {{stock}}</p>
+            <!-- Botón para agregar al carrito -->
+            <button class="add-to-cart-btn" data-product-id="{{_id}}">Agregar al carrito</button>
+            <!-- Añade más detalles si es necesario -->
+        </div>
+        {{/each}}
+    </div>
+ <div id="pagination">
+    <!-- Aquí se generará el código de los botones de paginación dinámicamente -->
+ </div>
+
+    <script src="../public/js/products.js"></script> <!-- Asegúrate de tener este archivo JS para manejar el filtrado -->
+
+</body>
+
+</html>

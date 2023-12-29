@@ -1,31 +1,62 @@
-const Message = require('../dao/models/Message'); // Asegúrate de que la ruta sea correcta según tu estructura
+const Product = require('../dao/models/Product');  // Asegúrate de que la ruta sea correcta según tu estructura
 
-class MessageManagerMongo {
-  async getMessages() {
+class ProductManagerMongo {
+  
+  // Obtener todos los productos
+  async getAllProducts() {
     try {
-      const messages = await Message.find();
-      return messages;
+      const products = await Product.find();
+      return products;
     } catch (error) {
-      console.error('Error al obtener mensajes:', error.message);
+      console.error('Error al obtener productos:', error.message);
       return [];
     }
   }
 
-  async addMessage(user, messageContent) {
+  // Obtener productos por ID
+  async getProductById(id) {
     try {
-      const newMessage = new Message({
-        user: user,
-        message: messageContent
-      });
-      await newMessage.save();
-      return newMessage;
+      const product = await Product.findById(id);
+      return product;
     } catch (error) {
-      console.error('Error al guardar el mensaje:', error.message);
+      console.error('Error al obtener producto por ID:', error.message);
       return null;
     }
   }
 
-  // Otros métodos relacionados con mensajes en MongoDB, como actualizar, eliminar, etc.
+  // Método para filtrar productos por categoría
+  async getProductsByCategory(category) {
+    try {
+      const products = await Product.find({ category: category });
+      return products;
+    } catch (error) {
+      console.error('Error al obtener productos por categoría:', error.message);
+      return [];
+    }
+  }
+
+  // Método para paginar productos
+  async getProductsByPage(page = 1, limit = 10) {
+    try {
+      const skip = (page - 1) * limit;
+      const products = await Product.find().skip(skip).limit(limit);
+      return products;
+    } catch (error) {
+      console.error('Error al obtener productos paginados:', error.message);
+      return [];
+    }
+  }
+
+  // Método para ordenar productos por precio
+  async getProductsSortedByPrice(order = 'asc') {
+    try {
+      const products = await Product.find().sort({ price: order });
+      return products;
+    } catch (error) {
+      console.error('Error al obtener productos ordenados por precio:', error.message);
+      return [];
+    }
+  }
 }
 
-module.exports = new MessageManagerMongo();
+module.exports = ProductManagerMongo;

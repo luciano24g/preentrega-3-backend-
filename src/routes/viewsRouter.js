@@ -1,32 +1,75 @@
 const express = require('express');
-const path = require('path');
 const router = express.Router();
-const ProductManager = require('../productManager');
-const productManager = new ProductManager();
-
+const ProductManagerMongo = require('../dao/ProductManagerMongo.js');
+const productManagerMongo = new ProductManagerMongo();
 
 // Ruta para renderizar la vista principal
 router.get('/', (req, res) => {
-  const limit = req.query.limit;
-  const products = productManager.getProducts(limit);
-  console.log('Products in viewsRouter:', products); // Agrega este console.log
-  res.render('home', { products });
+  try {
+    res.render('home');  // No se pasa el array de productos aquí
+  } catch (error) {
+    console.error('Error al cargar la vista principal:', error.message);
+    res.status(500).send('Error al cargar la vista principal.');
+  }
 });
 
-
+// Ruta para renderizar la vista del chat
 router.get('/chat', (req, res) => {
-  res.render('chat');
+  res.render('chat'); // Asegúrate de tener la vista 'chat' configurada correctamente.
 });
 
-
-// Ruta para renderizar la vista de productos en tiempo real
-router.get('/realTimeProducts', (req, res) => {
-  // Asegúrate de ajustar el límite según tus necesidades
-  const productList = productManager.getProductsForView(10);
-
-  // Renderiza la vista 'realTimeProducts' con la lista de productos
-  res.render('realTimeProducts', { productList });
+// Ruta para renderizar la vista del carrito (cart)
+router.get('/cart', (req, res) => {
+  res.render('cart'); // Asegúrate de tener la vista 'cart' configurada correctamente.
 });
 
+// Ruta para mostrar todos los productos
+router.get('/products', async (req, res) => {
+  try {
+    // Redireccionar a la primera página de productos paginados
+    res.redirect('/products/page/1');
+  } catch (error) {
+    console.error('Error al cargar los productos:', error.message);
+    res.status(500).send('Error al cargar los productos.');
+  }
+});
+
+// Ruta para obtener productos por categoría
+router.get('/products/category/:category', async (req, res) => {
+  try {
+    const category = req.params.category;
+    const products = await productManagerMongo.getProductsByCategory(category);
+    res.render('products', { products });
+  } catch (error) {
+    console.error('Error al cargar productos por categoría:', error.message);
+    res.status(500).send('Error al cargar los productos.');
+  }
+});
+
+// Ruta para obtener productos paginados
+router.get('/products/page/:page', async (req, res) => {
+  try {
+    const page = parseInt(req.params.page);
+    const products = await productManagerMongo.getProductsByPage(page);
+    res.render('products', { products });
+  } catch (error) {
+    console.error('Error al cargar productos paginados:', error.message);
+    res.status(500).send('Error al cargar los productos.');
+  }
+});
+
+// Ruta para obtener productos ordenados por precio
+router.get('/products/sorted/:order', async (req, res) => {
+  try {
+    const order = req.params.order; // Puede ser 'asc' o 'desc'
+    const products = await productManagerMongo.getProductsSortedByPrice(order);
+    res.render('products', { products });
+  } catch (error) {
+    console.error('Error al cargar productos ordenados:', error.message);
+    res.status(500).send('Error al cargar los productos.');
+  }
+});
+
+// ... (Otras rutas que ya tenías o que quieras agregar)
 
 module.exports = router;

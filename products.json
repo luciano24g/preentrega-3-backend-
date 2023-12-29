@@ -1,1 +1,255 @@
-[{"id":1,"title":"Producto 1","description":"Descripción del Producto 1","price":19.99,"thumbnail":"imagen1.jpg","code":"ABC123","stock":10},{"id":2,"title":"Producto 2","description":"Descripción del Producto 2","price":29.99,"thumbnail":"imagen2.jpg","code":"XYZ456","stock":5},{"id":3,"title":"Producto 3","description":"Descripción del Producto 2","price":29.99,"thumbnail":"imagen2.jpg","code":"XYZ456","stock":15},{"id":4,"title":"Producto 4","description":"Descripción del Producto 4","price":55.99,"thumbnail":"imagen4.jpg","code":"XASSD","stock":45}]
+[
+    {
+      "tipo": "zapatillas",
+      "nombre": "Air Max 90",
+      "descripcion": "Zapatillas deportivas con tecnología Air para mayor comodidad.",
+      "precio": 150.00,
+      "stock": 50
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Classic 99",
+      "descripcion": "Gorra ajustable con logo de Nike bordado.",
+      "precio": 25.00,
+      "stock": 100
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Sportswear Tee",
+      "descripcion": "Remera de algodón con diseño clásico de Nike.",
+      "precio": 30.00,
+      "stock": 80
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "Therma Hoodie",
+      "descripcion": "Buzo con tecnología Therma para mantener el calor corporal.",
+      "precio": 70.00,
+      "stock": 60
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "Air Force 1",
+      "descripcion": "Zapatillas icónicas con diseño versátil para cualquier ocasión.",
+      "precio": 120.00,
+      "stock": 55
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Legacy 91",
+      "descripcion": "Gorra con tecnología Dri-FIT para absorber el sudor.",
+      "precio": 28.00,
+      "stock": 95
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Dri-FIT Training Tee",
+      "descripcion": "Remera de entrenamiento con tejido que absorbe el sudor.",
+      "precio": 32.00,
+      "stock": 75
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "Sportswear Club",
+      "descripcion": "Buzo clásico para uso diario con ajuste cómodo.",
+      "precio": 65.00,
+      "stock": 50
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "React Infinity Run",
+      "descripcion": "Zapatillas de running con amortiguación React para un paseo suave.",
+      "precio": 160.00,
+      "stock": 40
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Heritage 86",
+      "descripcion": "Gorra con diseño clásico y ajuste personalizado.",
+      "precio": 22.00,
+      "stock": 90
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Legend 2.0",
+      "descripcion": "Remera de entrenamiento con diseño ergonómico.",
+      "precio": 35.00,
+      "stock": 85
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "NSW Fleece Pullover",
+      "descripcion": "Buzo con tejido suave y cálido.",
+      "precio": 75.00,
+      "stock": 45
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "Zoom Pegasus 37",
+      "descripcion": "Zapatillas de running con tecnología Zoom para mayor respuesta.",
+      "precio": 140.00,
+      "stock": 60
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Court Legacy",
+      "descripcion": "Gorra inspirada en el mundo del tenis.",
+      "precio": 26.00,
+      "stock": 88
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Dry Academy",
+      "descripcion": "Remera de entrenamiento con tecnología de absorción de humedad.",
+      "precio": 28.00,
+      "stock": 78
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "Team Club Fleece",
+      "descripcion": "Buzo con diseño clásico y confortable.",
+      "precio": 68.00,
+      "stock": 52
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "Joyride Run Flyknit",
+      "descripcion": "Zapatillas con tecnología Joyride para una experiencia única de amortiguación.",
+      "precio": 180.00,
+      "stock": 35
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "AeroBill Classic 99",
+      "descripcion": "Gorra ligera con tecnología AeroBill para transpirabilidad.",
+      "precio": 24.00,
+      "stock": 92
+    },
+    {
+      "tipo": "remera",
+      "nombre": "NSW Essentials",
+      "descripcion": "Remera con diseño minimalista y cómodo.",
+      "precio": 31.00,
+      "stock": 82
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "Therma Full-Zip",
+      "descripcion": "Buzo con cremallera completa y tecnología Therma.",
+      "precio": 72.00,
+      "stock": 48
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "Free RN 5.0",
+      "descripcion": "Zapatillas de running flexibles y ligeras.",
+      "precio": 130.00,
+      "stock": 58
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Court Aerobill",
+      "descripcion": "Gorra para practicar deportes con ajuste cómodo.",
+      "precio": 27.00,
+      "stock": 89
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Dry Legend",
+      "descripcion": "Remera de entrenamiento con logo estampado.",
+      "precio": 29.00,
+      "stock": 79
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "NSW Tech Fleece",
+      "descripcion": "Buzo con tecnología Tech Fleece para ligereza y calidez.",
+      "precio": 78.00,
+      "stock": 44
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "Renew Run",
+      "descripcion": "Zapatillas de running con tecnología Renew para mayor soporte.",
+      "precio": 110.00,
+      "stock": 63
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Heritage 86 Futura",
+      "descripcion": "Gorra con diseño moderno y ajuste personalizado.",
+      "precio": 23.00,
+      "stock": 91
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Training Tee",
+      "descripcion": "Remera de entrenamiento con diseño ergonómico.",
+      "precio": 33.00,
+      "stock": 77
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "NSW Club Fleece",
+      "descripcion": "Buzo clásico con diseño versátil.",
+      "precio": 69.00,
+      "stock": 49
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "Zoom Freak 2",
+      "descripcion": "Zapatillas de baloncesto con diseño inspirado en Giannis Antetokounmpo.",
+      "precio": 170.00,
+      "stock": 38
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Legacy 91 Tech",
+      "descripcion": "Gorra con tecnología Dri-FIT y ajuste cómodo.",
+      "precio": 29.00,
+      "stock": 87
+    },
+    {
+      "tipo": "remera",
+      "nombre": "NSW Club Jersey",
+      "descripcion": "Remera con diseño clásico y tejido suave.",
+      "precio": 34.00,
+      "stock": 76
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "Therma Training",
+      "descripcion": "Buzo con tecnología Therma para sesiones de entrenamiento.",
+      "precio": 73.00,
+      "stock": 47
+    },
+    {
+      "tipo": "zapatillas",
+      "nombre": "VaporMax Flyknit",
+      "descripcion": "Zapatillas con tecnología VaporMax para una sensación ligera y elástica.",
+      "precio": 190.00,
+      "stock": 33
+    },
+    {
+      "tipo": "gorra",
+      "nombre": "Futura Washed",
+      "descripcion": "Gorra con diseño lavado y logo estampado.",
+      "precio": 21.00,
+      "stock": 94
+    },
+    {
+      "tipo": "remera",
+      "nombre": "Court Dri-FIT",
+      "descripcion": "Remera para deportes de raqueta con tecnología Dri-FIT.",
+      "precio": 36.00,
+      "stock": 74
+    },
+    {
+      "tipo": "buzo",
+      "nombre": "NSW French Terry",
+      "descripcion": "Buzo con tejido French Terry para mayor comodidad.",
+      "precio": 74.00,
+      "stock": 46
+    }
+  ]
+  

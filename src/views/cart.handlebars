@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+</head>
+<body>
+
+<h1>Carrito de Compras</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.price}} {{this.currency}}</td>
+            <td>{{this.totalPrice}} {{this.currency}}</td>
+            <td>
+                <button class="remove-button" data-product-id="{{this.id}}">Eliminar</button>
+                <!-- Puedes agregar más acciones aquí, como modificar cantidad, etc. -->
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<script src="../public/js/cart.js"></script>
+
+</body>
+</html>

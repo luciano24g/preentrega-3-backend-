@@ -1,17 +1,75 @@
-<!-- home.handlebars -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
-  </head>
-  <body>
-   <h1>Listado de Productos</h1>
-<ul>
-  {{#each products}}
-    <li>{{this.title}} - {{this.price}}</li>
-  {{/each}}
-</ul>
-  </body>
+    <title>Home</title>
+    <style>
+        /* Estilos básicos para la navbar */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        /* Estilos para el contenido principal (puedes ajustar según tus necesidades) */
+        .content {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/chat">Chat</a></li>
+            <li><a href="/cart">Carrito</a></li>
+             <li><a href="/products">productos</a></li>
+            
+            
+
+            <!-- Puedes agregar más elementos de la navbar según lo necesites -->
+        </ul>
+    </nav>
+
+    <!-- Contenido principal de la página -->
+    <div class="content">
+        <h1>Bienvenido a nuestra tienda en línea</h1>
+        <p>Explora nuestra amplia variedad de productos y encuentra lo que necesitas.</p>
+        <!-- Aquí puedes colocar el contenido principal de tu página, como productos, descripciones, etc. -->
+    </div>
+
+    <!-- Puedes agregar cualquier otro contenido o scripts que necesites -->
+
+</body>
+
 </html>
