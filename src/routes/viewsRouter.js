@@ -2,18 +2,20 @@ const express = require('express');
 const router = express.Router();
 const ProductManagerMongo = require('../dao/ProductManagerMongo.js');
 const productManagerMongo = new ProductManagerMongo();
-const cartRouter = require('../public/js/cartRouter.js'); // Asegúrate de tener la ruta correcta
+const cartRouter = require('../public/js/cartRouter.js');
+const Cart = require('../dao/models/Cart.js'); // Asegúrate de tener la ruta correcta
 
 // Ruta para renderizar la vista principal
-router.get('/', (req, res) => {
+router.get('/products', async (req, res) => {
   try {
-    res.render('home');  // No se pasa el array de productos aquí
+    const { page, limit, sort, query } = req.query; // Obtener los parámetros de consulta
+    const productsData = await productManagerMongo.getProducts({ page, limit, sort, query });
+    res.render('products', { products: productsData.payload });
   } catch (error) {
-    console.error('Error al cargar la vista principal:', error.message);
-    res.status(500).send('Error al cargar la vista principal.');
+    console.error('Error al cargar los productos:', error.message);
+    res.status(500).send('Error al cargar los productos.');
   }
 });
-
 // Ruta para renderizar la vista del chat
 router.get('/chat', (req, res) => {
   res.render('chat'); // Asegúrate de tener la vista 'chat' configurada correctamente.
@@ -22,47 +24,16 @@ router.get('/chat', (req, res) => {
 
 
 router.post('/cart/add', (req, res) => {
-  try {
-      const { productId, productName, quantity } = req.body;
-
-      // Verificar si el producto ya está en el carrito
-      const existingProduct = cartProducts.find(product => product.productId === productId);
-
-      if (existingProduct) {
-          existingProduct.quantity += quantity;
-      } else {
-          cartProducts.push({
-              productId,
-              productName,
-              quantity
-          });
-      }
-
-      res.json({ success: true, message: 'Producto agregado al carrito.' });
-
-  } catch (error) {
-      console.error('Error al agregar producto al carrito:', error.message);
-      res.status(500).json({ success: false, message: 'Error al agregar producto al carrito.' });
-  }
+  const productId = req.body.productId;
+  req.session.cart = req.session.cart || [];
+  req.session.cart.push(productId);
+  res.json({ success: true, message: 'Producto agregado al carrito correctamente.' });
 });
 
-
-// Utiliza cartRouter
-
-router.get('/cart', async (req, res) => {
-  try {
-    const userId = req.userId;  // Asume que ya tienes el ID del usuario en el objeto de solicitud
-
-    const cart = await Cart.findOne({ userId }).populate('products.productId');  // Esto trae los detalles del producto
-
-    res.render('cart', { cartProducts: cart.products });
-
-  } catch (error) {
-    console.error('Error al cargar la vista del carrito:', error.message);
-    res.render('cart', { errorMessage: 'Error al cargar la vista del carrito.' });
-  }
+router.get('/cart', (req, res) => {
+  // Como el carrito está manejado en el lado del cliente, simplemente renderizamos la vista del carrito
+  res.render('cart');
 });
-
 
 // Ruta para mostrar todos los productos
 router.get('/products', async (req, res) => {
@@ -78,12 +49,13 @@ router.get('/products', async (req, res) => {
 // Ruta para obtener productos por categoría
 router.get('/products/tipo/:tipo', async (req, res) => {
   try {
-      const tipo = req.params.tipo;
-      const products = await productManagerMongo.getProductsByTipo(tipo);
-      res.render('products', { products });
+    const { tipo } = req.params; // Obtener el tipo de producto desde los parámetros de la ruta
+    const { page, limit, sort, query } = req.query; // Obtener los parámetros de consulta
+    const productsData = await productManagerMongo.getProductsByTypeAndPage(tipo, page, limit, sort);
+    res.render('products', { products: productsData.docs });
   } catch (error) {
-      console.error('Error al cargar productos por tipo:', error.message);
-      res.status(500).send('Error al cargar los productos.');
+    console.error('Error al cargar productos por tipo:', error.message);
+    res.status(500).send('Error al cargar los productos.');
   }
 });
 
@@ -99,30 +71,27 @@ router.get('/products/page/:page', async (req, res) => {
   }
 });
 
-// Ruta para obtener productos ordenados de forma ascendente
-router.get('/products/sorted/asc/:page', async (req, res) => {
+// Ruta para obtener productos ordenados por precio de forma ascendente
+router.get('/products/sorted/asc', async (req, res) => {
   try {
-    const page = parseInt(req.params.page);
-    const products = await productManagerMongo.getProductsSortedByPrice('asc', page);
-    res.render('products', { products });
+    const { page, limit, tipo } = req.query; // Puedes incluir tipo si también quieres filtrar por tipo
+    const productsData = await productManagerMongo.getProducts({ page, limit, sort: 'asc', query: tipo });
+    res.render('products', { products: productsData.docs });
   } catch (error) {
     console.error('Error al cargar productos ordenados ascendentemente:', error.message);
     res.status(500).send('Error al cargar los productos.');
   }
 });
 
-// Ruta para obtener productos ordenados de forma descendente
-router.get('/products/sorted/desc/:page', async (req, res) => {
+// Ruta para obtener productos ordenados por precio de forma descendente
+router.get('/products/sorted/desc', async (req, res) => {
   try {
-    const page = parseInt(req.params.page);
-    const products = await productManagerMongo.getProductsSortedByPrice('desc', page);
-    res.render('products', { products });
+    const { page, limit, tipo } = req.query; // Puedes incluir tipo si también quieres filtrar por tipo
+    const productsData = await productManagerMongo.getProducts({ page, limit, sort: 'desc', query: tipo });
+    res.render('products', { products: productsData.docs });
   } catch (error) {
     console.error('Error al cargar productos ordenados descendentemente:', error.message);
     res.status(500).send('Error al cargar los productos.');
   }
 });
-
-// ... (Otras rutas que ya tenías o que quieras agregar)
-
 module.exports = router;
