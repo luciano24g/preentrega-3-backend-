@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Cart = require('../../dao/models/Cart');
+const Cart = require('../dao/models/Cart');
 
 // Agregar producto al carrito
 router.post('/add', async (req, res) => {

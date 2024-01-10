@@ -1,7 +1,6 @@
 const Product = require('../dao/models/Product.js');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-
 class ProductManagerMongo {
   constructor() {
     // Configurar paginate para Product
@@ -20,12 +19,7 @@ class ProductManagerMongo {
         options.sort = { precio: sort === 'asc' ? 1 : -1 };
       }
 
-      let queryOptions = {};
-      if (query) {
-        queryOptions = { tipo: query };
-      }
-
-      const products = await Product.paginate(queryOptions, options);
+      const products = await Product.paginate(query, options);
 
       return {
         status: 'success',
@@ -36,8 +30,8 @@ class ProductManagerMongo {
         page: products.page,
         hasPrevPage: products.hasPrevPage,
         hasNextPage: products.hasNextPage,
-        prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}${sort ? `&sort=${sort}` : ''}${query ? `&query=${query}` : ''}` : null,
-        nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}${sort ? `&sort=${sort}` : ''}${query ? `&query=${query}` : ''}` : null,
+        prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}${sort ? `&sort=${sort}` : ''}${query && query.tipo ? `&tipo=${query.tipo}` : ''}` : null,
+        nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}${sort ? `&sort=${sort}` : ''}${query && query.tipo ? `&tipo=${query.tipo}` : ''}` : null,
       };
 
     } catch (error) {
@@ -50,27 +44,63 @@ class ProductManagerMongo {
     }
   }
 
-  async getProductsByTypeAndPage(tipo, page = 1, limit = 10, order = 'asc') {
+  async addProduct(productData) {
     try {
-      const options = {
-        page,
-        limit,
-        sort: { precio: order === 'asc' ? 1 : -1 }
+      const newProduct = new Product(productData);
+      await newProduct.save();
+      return {
+        status: 'success',
+        payload: newProduct,
+        message: 'Producto agregado correctamente'
       };
-      const products = await Product.paginate({ tipo }, options);
-      return products;
     } catch (error) {
-      console.error('Error al obtener productos paginados por tipo y ordenados por precio:', error.message);
-      return [];
+      console.error('Error al agregar producto:', error.message);
+      return {
+        status: 'error',
+        payload: null,
+        message: 'Error al agregar producto'
+      };
     }
   }
 
-  // Nuevo método agregado
-  async getProductsByPage(page, limit = 10, sort, query) {
-    return await this.getProducts({ page, limit, sort, query });
+  async updateProduct(productId, updatedData) {
+    try {
+      const product = await Product.findByIdAndUpdate(productId, updatedData, { new: true });
+      if (!product) throw new Error('Producto no encontrado');
+      return {
+        status: 'success',
+        payload: product,
+        message: 'Producto actualizado correctamente'
+      };
+    } catch (error) {
+      console.error('Error al actualizar producto:', error.message);
+      return {
+        status: 'error',
+        payload: null,
+        message: 'Error al actualizar producto'
+      };
+    }
   }
 
-  // ... [otros métodos existentes que no se modificaron]
+  async deleteProduct(productId) {
+    try {
+      const product = await Product.findByIdAndDelete(productId);
+      if (!product) throw new Error('Producto no encontrado');
+      return {
+        status: 'success',
+        payload: product,
+        message: 'Producto eliminado correctamente'
+      };
+    } catch (error) {
+      console.error('Error al eliminar producto:', error.message);
+      return {
+        status: 'error',
+        payload: null,
+        message: 'Error al eliminar producto'
+      };
+    }
+  }
 }
+
 
 module.exports = ProductManagerMongo;

@@ -1,58 +1,49 @@
 const express = require('express');
-const ProductManager = require('../productManager');
-const Message = require('../dao/models/Message');
+const mongoose = require('mongoose');
+const objectId = new mongoose.Types.ObjectId();
+const Product = require('../dao/models/Product.js');
+
+
+const ProductManagerMongo = require('../dao/ProductManagerMongo');
 
 const router = express.Router();
-const productManager = new ProductManager();
+const productManager = new ProductManagerMongo();
+
 // Middleware para analizar el cuerpo de solicitudes JSON
 router.use(express.json());
 
 // Rutas
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const limit = req.query.limit;
-    const products = productManager.getProducts(limit);
-    console.log('Products in productRouter:', products); // Agrega este console.log
-    res.render('home', { products });
-  } catch (error) {
-    console.error('Error:', error);
-    next(error);
-  }
-});
+    const { limit = 10, page = 1, sort, tipo } = req.query;
+    
+    const query = tipo ? { tipo } : null;
 
-router.get('/:pid', (req, res, next) => {
-  try {
-    const productId = parseInt(req.params.pid);
-    const product = productManager.getProductById(productId);
+    const result = await productManager.getProducts({ limit, page, sort, query });
 
-    if (product) {
-      res.render('productDetail', { product }); // Renderiza la vista 'productDetail' con el producto específico
-    } else {
-      res.status(404).json({ error: 'Product not found' });
-    }
+    res.json(result);
+
   } catch (error) {
     next(error);
   }
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const newProduct = req.body;
-    const createdProduct = productManager.addProduct(newProduct);
-    io.emit('actualizarLista', productManager.getProducts());
+    const createdProduct = await productManager.addProduct(newProduct);
     res.status(201).json(createdProduct);
-  
   } catch (error) {
     next(error);
   }
 });
 
-router.put('/:pid', (req, res, next) => {
+router.put('/:pid', async (req, res, next) => {
   try {
     const productId = parseInt(req.params.pid);
     const updatedProduct = req.body;
-    const product = productManager.updateProduct(productId, updatedProduct);
+    const product = await productManager.updateProduct(productId, updatedProduct); // Asumiendo que updateProduct es un método asíncrono
 
     if (product) {
       res.json(product);
@@ -64,39 +55,16 @@ router.put('/:pid', (req, res, next) => {
   }
 });
 
-router.delete('/:pid', (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
-    const productId = parseInt(req.params.pid);
-    const deletedProduct = productManager.deleteProduct(productId);
-
-    if (deletedProduct) {
-      res.json(deletedProduct);
-    } else {
-      res.status(404).json({ error: 'Product not found' });
+    const productId = req.params.id;
+    const result = await Product.findByIdAndDelete(productId);
+    if (!result) {
+      return res.status(404).json({ error: 'Product not found' });
     }
+    res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     next(error);
   }
 });
-router.post('/message', async (req, res, next) => {
-  try {
-    const { user, message } = req.body;
-
-    // Crear una instancia del modelo de mensajes
-    const newMessage = new Message({
-      user,
-      message
-    });
-
-    // Guardar el mensaje en la base de datos
-    const savedMessage = await newMessage.save();
-
-    // Responder con el mensaje guardado
-    res.status(201).json(savedMessage);
-  } catch (error) {
-    console.error('Error al guardar el mensaje:', error);
-    next(error);
-  }
-});
-
 module.exports = { router, productManager };

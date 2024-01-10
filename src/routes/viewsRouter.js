@@ -2,8 +2,16 @@ const express = require('express');
 const router = express.Router();
 const ProductManagerMongo = require('../dao/ProductManagerMongo.js');
 const productManagerMongo = new ProductManagerMongo();
-const cartRouter = require('../public/js/cartRouter.js');
-const Cart = require('../dao/models/Cart.js'); // Asegúrate de tener la ruta correcta
+
+
+ // Asegúrate de tener la ruta correcta
+
+const Message = require('../dao/models/Message');
+
+router.get('/', (req, res) => {
+  res.render('home');
+});
+
 
 // Ruta para renderizar la vista principal
 router.get('/products', async (req, res) => {
@@ -22,13 +30,6 @@ router.get('/chat', (req, res) => {
 });
 
 
-
-router.post('/cart/add', (req, res) => {
-  const productId = req.body.productId;
-  req.session.cart = req.session.cart || [];
-  req.session.cart.push(productId);
-  res.json({ success: true, message: 'Producto agregado al carrito correctamente.' });
-});
 
 router.get('/cart', (req, res) => {
   // Como el carrito está manejado en el lado del cliente, simplemente renderizamos la vista del carrito
@@ -94,4 +95,19 @@ router.get('/products/sorted/desc', async (req, res) => {
     res.status(500).send('Error al cargar los productos.');
   }
 });
+
+router.post('/sendMessage', async (req, res) => {
+  try {
+    const { user, message } = req.body;
+    const newMessage = await messageManager.create({ user, message });
+    res.status(201).json(newMessage);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+
 module.exports = router;

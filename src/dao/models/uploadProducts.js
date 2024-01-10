@@ -2,7 +2,7 @@
 const dbConnection = require('../../db.js');  // Ajusta la ruta según la ubicación real
 
 
-const fs = require('fs').promises;
+
 const Product = require('./Product.js');  // Asegúrate de que la ruta sea correcta
 const mongoose = require('mongoose');  // No es necesario si ya tienes la conexión
 

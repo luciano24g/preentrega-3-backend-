@@ -1,36 +1,42 @@
+const Message = require('../dao/models/Message.js');  // Asegúrate de que la ruta sea correcta
+
+
+
 class MessageManagerMongo {
-  constructor(model) {
-    this.model = model;
+  constructor() {
+    // No necesitas un modelo aquí, ya que lo pasaremos directamente cuando creemos una instancia de esta clase.
   }
 
   async getAll() {
-    return await this.model.find();
+    return await Message.find();
   }
 
   async getById(id) {
-    return await this.model.findById(id);
+    return await Message.findById(id);
   }
 
   async create(data) {
-    const newItem = new this.model(data);
-    await newItem.save();
-    return newItem;
-  }
-
+    const newMessage = new Message({ 
+        user: data.user, 
+        message: data.message 
+    });
+    await newMessage.save();
+    return newMessage;
+}
   async update(id, data) {
-    const updatedItem = await this.model.findByIdAndUpdate(id, data, { new: true });
-    if (!updatedItem) {
+    const updatedMessage = await Message.findByIdAndUpdate(id, data, { new: true });
+    if (!updatedMessage) {
       throw new Error('Message not found');
     }
-    return updatedItem;
+    return updatedMessage;
   }
 
   async delete(id) {
-    const deletedItem = await this.model.findByIdAndDelete(id);
-    if (!deletedItem) {
+    const deletedMessage = await Message.findByIdAndDelete(id);
+    if (!deletedMessage) {
       throw new Error('Message not found');
     }
-    return deletedItem;
+    return deletedMessage;
   }
 }
 
