@@ -10,7 +10,7 @@ const Message = require('./dao/models/Message');
 const socketIo = require('socket.io');
 const messageRouter = require('./routes/messageRouter');
 const session = require('express-session');
-const sessionRouter = require('./routes/sessionRouter');
+const sessionRouter = require('./routes/sessions.router.js');
 // Generar una clave secreta normal para la sesión
 
 
