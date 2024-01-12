@@ -72,6 +72,29 @@
         .add-to-cart-button:hover {
             background-color: #0056b3;
         }
+      .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination-item {
+        margin: 0 5px;
+    }
+
+    .pagination-link {
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #333;
+        border-radius: 5px;
+        color: #333;
+        cursor: pointer;
+    }
+
+    .pagination-link.active {
+        background-color: #333;
+        color: #fff;
+    }
     </style>
 </head>
 
@@ -82,45 +105,54 @@
             <li><a href="/chat">Chat</a></li>
             <li><a href="/cart">Carrito</a></li>
              <li><a href="/products">productos</a></li>
-            
-            
-
-            <!-- Puedes agregar más elementos de la navbar según lo necesites -->
         </ul>
     </nav>
 
 
 
     <h1>Productos</h1>
+<div>
+  Tipos:
+  {{#each tipos}}
+    <span>{{this}}</span>
+  {{/each}}
+</div>
 
-    <!-- Filtro para cambiar las categorías -->
-    <select id="categoryFilter">
-        <option value="all">Todos</option>
-        <option value="buzo">Buzos</option>
-        <option value="zapatillas">zapatillas</option>
-        <option value="remera">remeras</option>
-        <option value="gorra">gorras</option>
-    
-    </select>
 
-    <!-- Contenedor para los productos -->
-    <div id="productList">
-        {{#each products}}
-        <div class="product-card">
+ <select id="categoryFilter">
+    <option value="all">Todos</option>
+    <option value="buzo">Buzos</option>
+    <option value="zapatillas">Zapatillas</option>
+    <option value="remera">Remeras</option>
+    <option value="gorra">Gorras</option>
+  </select>
+<!-- Contenedor para los productos -->
+<div id="productList">
+    {{#each products}}
+        <div class="product-card" data-tipo="{{tipo}}">
             <h2>{{nombre}}</h2>
             <p>{{descripcion}}</p>
             <p>Precio: ${{precio}}</p>
             <p>Stock: {{stock}}</p>
             <!-- Botón para agregar al carrito -->
-           <button class="add-to-cart-button" data-product-id="{{this._id}}">Agregar al carrito</button>
-
+            <button class="add-to-cart-button" data-product-id="{{_id}}">Agregar al carrito</button>
             <!-- Añade más detalles si es necesario -->
         </div>
+    {{/each}}
+</div>
+<div>
+    Página:
+    <ul class="pagination">
+        {{#each pages}}
+            <li class="pagination-item">
+                <a href="/products?page={{this}}" class="pagination-link {{#if (eq ../currentPage this)}}active{{/if}}">{{this}}</a>
+            </li>
         {{/each}}
-    </div>
+    </ul>
+</div>
 
-    <script src="../public/js/products.js"></script> <!-- Asegúrate de tener este archivo JS para manejar el filtrado -->
-
+    <script src="/js/products.js"></script> 
+    <script src="/js/cart.js"></script>
 </body>
 
 </html>

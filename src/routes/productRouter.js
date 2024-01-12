@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const objectId = new mongoose.Types.ObjectId();
 const Product = require('../dao/models/Product.js');
-
-
 const ProductManagerMongo = require('../dao/ProductManagerMongo');
 
 const router = express.Router();
@@ -16,14 +14,13 @@ router.use(express.json());
 
 router.get('/', async (req, res, next) => {
   try {
-    const { limit = 10, page = 1, sort, tipo } = req.query;
-    
+    const { limit = 10, page = 1, sort, tipo } = req.query || {};
     const query = tipo ? { tipo } : null;
 
     const result = await productManager.getProducts({ limit, page, sort, query });
+    console.log('Products Result:', result);
 
     res.json(result);
-
   } catch (error) {
     next(error);
   }
@@ -43,7 +40,7 @@ router.put('/:pid', async (req, res, next) => {
   try {
     const productId = parseInt(req.params.pid);
     const updatedProduct = req.body;
-    const product = await productManager.updateProduct(productId, updatedProduct); // Asumiendo que updateProduct es un método asíncrono
+    const product = await productManager.updateProduct(productId, updatedProduct);
 
     if (product) {
       res.json(product);
@@ -58,13 +55,16 @@ router.put('/:pid', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const productId = req.params.id;
-    const result = await Product.findByIdAndDelete(productId);
-    if (!result) {
+    const result = await productManager.deleteProduct(productId);
+
+    if (!result.payload) {
       return res.status(404).json({ error: 'Product not found' });
     }
+
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     next(error);
   }
 });
+
 module.exports = { router, productManager };

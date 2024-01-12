@@ -56,31 +56,27 @@
             <!-- Puedes agregar más elementos de la navbar según lo necesites -->
         </ul>
     </nav>
+ <h1>Carrito de Compras</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cartProducts}}
+            <tr>
+                <td>{{this.product.nombre}}</td>
+                <td>{{this.quantity}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 
 
-<h1>Carrito de Compras</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <!-- Otros encabezados si los necesitas -->
-        </tr>
-    </thead>
-    <tbody>
-        {{#each cartProducts}}
-        <tr>
-            <td>{{this.productName}}</td>
-            <td>{{this.quantity}}</td>
-            <!-- Otros campos si los necesitas -->
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-
-
-<script src="../public/js/cart.js"></script>
+<script src="/js/cart.js"></script>
 
 </body>
 </html>

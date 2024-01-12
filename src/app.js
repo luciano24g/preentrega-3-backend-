@@ -11,6 +11,7 @@ const socketIo = require('socket.io');
 const messageRouter = require('./routes/messageRouter');
 const session = require('express-session');
 const sessionRouter = require('./routes/sessions.router.js');
+const cartRouter = require('./routes/cartRouter.js');
 // Generar una clave secreta normal para la sesión
 
 
@@ -23,12 +24,11 @@ app.use(express.json());
 
 // Configuración de express-session con la clave secreta
 app.use(session({
-  secret:"CoderSecret",
+  secret: "CoderSecret",
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
-
 // Configuración de Handlebars
 app.engine('.handlebars', engine({
   runtimeOptions: {
@@ -42,20 +42,22 @@ app.set('views', path.join(__dirname, 'views'));
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Agregar el enrutador de productos bajo '/api'
 app.use('/api/products', productsRouter);
 app.use('/', viewsRouter);  // Asegúrate de que esta ruta maneje la vista de productos
-app.use('/messages', messageRouter);
+app.use('/api/messages', messageRouter);
 app.use('/api/sessions', sessionRouter);
+app.use("/api/carts", cartRouter);
 // Configuración de Socket.IO
 const io = socketIo(httpServer);
 app.set('socketio', io);
 
 io.on('connection', (socket) => {
   console.log('New client connected');
-  const productList = productManagerMongo.getProducts();
+ 
 
-  socket.emit('actualizarLista', productList);
+ 
 
   socket.on('chatMessage', async (data) => {
     try {

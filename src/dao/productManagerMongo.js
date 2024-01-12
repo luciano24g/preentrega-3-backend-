@@ -9,19 +9,15 @@ class ProductManagerMongo {
 
   async getProducts({ limit = 10, page = 1, sort, query }) {
     try {
-      let options = {
+      const options = {
         page,
         limit,
-        sort: {}
+        sort: sort ? { precio: sort === 'asc' ? 1 : -1 } : {}
       };
-
-      if (sort) {
-        options.sort = { precio: sort === 'asc' ? 1 : -1 };
-      }
 
       const products = await Product.paginate(query, options);
 
-      return {
+      const response = {
         status: 'success',
         payload: products.docs,
         totalPages: products.totalPages,
@@ -30,10 +26,11 @@ class ProductManagerMongo {
         page: products.page,
         hasPrevPage: products.hasPrevPage,
         hasNextPage: products.hasNextPage,
-        prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}${sort ? `&sort=${sort}` : ''}${query && query.tipo ? `&tipo=${query.tipo}` : ''}` : null,
-        nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}${sort ? `&sort=${sort}` : ''}${query && query.tipo ? `&tipo=${query.tipo}` : ''}` : null,
+        prevLink: products.hasPrevPage ? this.generatePageLink(limit, products.prevPage, sort, query) : null,
+        nextLink: products.hasNextPage ? this.generatePageLink(limit, products.nextPage, sort, query) : null,
       };
 
+      return response;
     } catch (error) {
       console.error('Error al obtener productos:', error.message);
       return {
@@ -42,6 +39,38 @@ class ProductManagerMongo {
         message: 'Error al obtener productos'
       };
     }
+  }
+
+  async getDistinctTipos() {
+    try {
+      const distinctTipos = await Product.distinct('tipo');
+      return {
+        status: 'success',
+        payload: distinctTipos,
+        message: 'Tipos distintos obtenidos correctamente'
+      };
+    } catch (error) {
+      console.error('Error al obtener tipos distintos:', error.message);
+      return {
+        status: 'error',
+        payload: null,
+        message: 'Error al obtener tipos distintos'
+      };
+    }
+  }
+
+  generatePageLink(limit, page, sort, query) {
+    let link = `/api/products?limit=${limit}&page=${page}`;
+
+    if (sort) {
+      link += `&sort=${sort}`;
+    }
+
+    if (query && query.tipo) {
+      link += `&tipo=${query.tipo}`;
+    }
+
+    return link;
   }
 
   async addProduct(productData) {
@@ -101,6 +130,5 @@ class ProductManagerMongo {
     }
   }
 }
-
 
 module.exports = ProductManagerMongo;

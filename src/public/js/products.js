@@ -1,17 +1,21 @@
+// products.js
 document.addEventListener('DOMContentLoaded', () => {
-    const categoryFilter = document.getElementById('categoryFilter');
-  
-    // Event listener para el cambio de tipo
-    categoryFilter.addEventListener('change', (event) => {
-      const selectedTipo = event.target.value; 
-      if (selectedTipo === 'all') {
-          // Si se selecciona "Todos", simplemente redirige a la página de todos los productos
-          window.location.href = '/products';
+  const categoryFilter = document.getElementById('categoryFilter');
+  const productList = document.getElementById('productList');
+
+  // Event listener para el cambio de tipo
+  categoryFilter.addEventListener('change', (event) => {
+    const selectedTipo = event.target.value;
+
+    // Iterar sobre los productos y mostrar/ocultar según el tipo seleccionado
+    [...productList.children].forEach(product => {
+      const productTipo = product.getAttribute('data-tipo');
+
+      if (selectedTipo === 'all' || productTipo === selectedTipo) {
+        product.style.display = 'block';
       } else {
-        window.location.href = `/products/tipo/${selectedTipo}`;
+        product.style.display = 'none';
       }
     });
-  
-    // No hay ninguna función de renderizado aquí, ya que no la necesitas.
   });
-  
+});
