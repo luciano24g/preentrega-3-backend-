@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const dbConnection = require('../../db.js');
+
+
 const messageSchema = new mongoose.Schema({
   user: {
     type: String,

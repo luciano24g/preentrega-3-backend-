@@ -35,7 +35,29 @@ router.post('/', async (req, res, next) => {
     next(error);
   }
 });
+router.post('/:cartId/add-product/:productId', async (req, res) => {
+  const cartId = req.params.cartId;
+  const productId = req.params.productId;
+  const quantity = req.body.quantity || 1;
 
+  try {
+      // Asegúrate de utilizar la instancia de CartManagerMongo
+      const cart = await cartManagerMongo.addProductToCart(cartId, productId, quantity);
+
+      res.json({
+          status: 'success',
+          msg: 'Producto agregado al carrito correctamente',
+          cart: cart
+      });
+  } catch (error) {
+      console.error('Error al agregar producto al carrito:', error);
+      res.status(500).json({
+          status: 'error',
+          msg: 'Error al agregar producto al carrito',
+          error: error.message
+      });
+  }
+});
 router.put('/:pid', async (req, res, next) => {
   try {
     const productId = parseInt(req.params.pid);

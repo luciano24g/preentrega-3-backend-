@@ -35,48 +35,60 @@
             background-color: #555;
         }
 
-        /* Estilos para el contenido principal (puedes ajustar según tus necesidades) */
+        /* Estilos para el contenido principal */
         .content {
             padding: 20px;
             font-size: 18px;
             line-height: 1.6;
         }
+
+        /* Estilos específicos para la visualización de productos en el carrito */
+        .product-container {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .product-name {
+            font-weight: bold;
+        }
+
+        .product-quantity {
+            color: #555;
+        }
     </style>
 </head>
 <body>
+
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/chat">Chat</a></li>
             <li><a href="/cart">Carrito</a></li>
-             <li><a href="/products">productos</a></li>
-            
-            
-
-            <!-- Puedes agregar más elementos de la navbar según lo necesites -->
+            <li><a href="/products">Productos</a></li>
+            <li><a href="/logout">Cerrar sesión</a></li>
         </ul>
-    </nav>
- <h1>Carrito de Compras</h1>
+    </nav> 
 
-    <table>
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each cartProducts}}
-            <tr>
-                <td>{{this.product.nombre}}</td>
-                <td>{{this.quantity}}</td>
-            </tr>
+    <div class="content">
+        <h1>Carrito de Compras</h1>
+
+        {{#if cart}}
+            {{#each cart}}
+                {{#each products}}
+                    <div class="product-container">
+                        <p class="product-name">Nombre del Producto: {{this.product.nombre}}</p>
+                        <p class="product-quantity">Cantidad: {{this.quantity}}</p>
+                    </div>
+                {{/each}}
             {{/each}}
-        </tbody>
-    </table>
+        {{else}}
+            <p>El carrito está vacío</p>
+        {{/if}} 
+    </div>
 
-
-<script src="/js/cart.js"></script>
-
+    <script src="/js/cart.js"></script>
 </body>
 </html>

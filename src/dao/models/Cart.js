@@ -5,12 +5,12 @@ const cartSchema = new mongoose.Schema({
         {
             product: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "products",
+                ref: "Product",  // Usar "Product" en lugar de "products"
                 required: true,
             },
             quantity: {
                 type: Number,
-                require: true,
+                required: true,
                 default: 1
             }
         }
@@ -19,8 +19,7 @@ const cartSchema = new mongoose.Schema({
 
 cartSchema.pre("find", function(){
     this.populate("products.product");
-})
+});
 
-const cartsModel = mongoose.model("cart", cartSchema);
-
-module.exports = mongoose.model('Cart', cartSchema);
+const CartModel = mongoose.model("Cart", cartSchema);  // Cambiar el nombre del modelo a "Cart"
+module.exports = CartModel;

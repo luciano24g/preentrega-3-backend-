@@ -5,7 +5,6 @@ const path = require('path');
 const dbConnection = require('./db.js');
 const viewsRouter = require('./routes/viewsRouter');
 const { router: productsRouter } = require('./routes/productRouter');
-const productManagerMongo = require('./dao/ProductManagerMongo.js');
 const Message = require('./dao/models/Message');
 const socketIo = require('socket.io');
 const messageRouter = require('./routes/messageRouter');
@@ -29,6 +28,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }));
+
 // Configuración de Handlebars
 app.engine('.handlebars', engine({
   runtimeOptions: {
@@ -36,6 +36,8 @@ app.engine('.handlebars', engine({
     allowProtoPropertiesByDefault: true,
   },
 }));
+
+
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -49,6 +51,9 @@ app.use('/', viewsRouter);  // Asegúrate de que esta ruta maneje la vista de pr
 app.use('/api/messages', messageRouter);
 app.use('/api/sessions', sessionRouter);
 app.use("/api/carts", cartRouter);
+
+
+
 // Configuración de Socket.IO
 const io = socketIo(httpServer);
 app.set('socketio', io);

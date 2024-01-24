@@ -4,23 +4,23 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 const productSchema = new mongoose.Schema({
     tipo: {
         type: String,
-        require: true
+        required: true  // Corregir el nombre de la propiedad
     },
     nombre: {
         type: String,
-        require: true
+        required: true
     },
     precio: {
         type: Number,
-        require: true
+        required: true
     },
     descripcion: {
         type: String,
-        require: true
+        required: true
     },
     stock: {
         type: Number,
-        require: true
+        required: true
     }
 });
 

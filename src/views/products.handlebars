@@ -105,19 +105,13 @@
             <li><a href="/chat">Chat</a></li>
             <li><a href="/cart">Carrito</a></li>
              <li><a href="/products">productos</a></li>
+                 <li><a href="/logout">Cerrar sesión</a></li>
         </ul>
     </nav>
 
 
 
     <h1>Productos</h1>
-<div>
-  Tipos:
-  {{#each tipos}}
-    <span>{{this}}</span>
-  {{/each}}
-</div>
-
 
  <select id="categoryFilter">
     <option value="all">Todos</option>
@@ -135,7 +129,8 @@
             <p>Precio: ${{precio}}</p>
             <p>Stock: {{stock}}</p>
             <!-- Botón para agregar al carrito -->
-            <button class="add-to-cart-button" data-product-id="{{_id}}">Agregar al carrito</button>
+           <button class="add-to-cart-button" data-product-id="{{_id}}">Agregar al carrito</button>
+
             <!-- Añade más detalles si es necesario -->
         </div>
     {{/each}}
@@ -152,7 +147,7 @@
 </div>
 
     <script src="/js/products.js"></script> 
-    <script src="/js/cart.js"></script>
+    
 </body>
 
 </html>
