@@ -11,23 +11,28 @@ const messageRouter = require('./routes/messageRouter');
 const session = require('express-session');
 const sessionRouter = require('./routes/sessions.router.js');
 const cartRouter = require('./routes/cartRouter.js');
-// Generar una clave secreta normal para la sesión
-
+const passport = require('passport');
+const inicializePassport = require('./dao/passport.config.js');
+const crypto = require('crypto');
 
 const PORT = 8080;
 const app = express();
 const httpServer = http.createServer(app);
 
-// Middleware para parsear el cuerpo de la solicitud en formato JSON
 app.use(express.json());
 
-// Configuración de express-session con la clave secreta
+// Configuración de express-session con la nueva clave secreta
 app.use(session({
-  secret: "CoderSecret",
+  secret: crypto.randomBytes(32).toString('hex'),
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
 }));
+
+// Inicialización de Passport
+app.use(passport.initialize());
+app.use(passport.session());
+inicializePassport(passport); // Pasa el objeto Passport como argumento
 
 // Configuración de Handlebars
 app.engine('.handlebars', engine({
@@ -37,22 +42,21 @@ app.engine('.handlebars', engine({
   },
 }));
 
-
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // Agregar el enrutador de productos bajo '/api'
 app.use('/api/products', productsRouter);
-app.use('/', viewsRouter);  // Asegúrate de que esta ruta maneje la vista de productos
+app.use('/', viewsRouter);
 app.use('/api/messages', messageRouter);
+
+// Utiliza el enrutador de sesiones
 app.use('/api/sessions', sessionRouter);
+
 app.use("/api/carts", cartRouter);
-
-
 
 // Configuración de Socket.IO
 const io = socketIo(httpServer);
@@ -60,9 +64,6 @@ app.set('socketio', io);
 
 io.on('connection', (socket) => {
   console.log('New client connected');
- 
-
- 
 
   socket.on('chatMessage', async (data) => {
     try {

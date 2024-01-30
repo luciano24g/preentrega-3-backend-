@@ -11,5 +11,7 @@ form.addEventListener('submit', e=>{
         headers:{
             "Content-Type":"application/json"
         }
-    }).then(result=>result.json()).then(json => console.log(json))
-})
+    })
+    .then(result => result.json())
+    .then(data => console.log(data));
+});

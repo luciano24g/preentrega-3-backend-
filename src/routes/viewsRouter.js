@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport'); // Agrega esta línea
 const ProductManagerMongo = require('../dao/ProductManagerMongo.js');
 const productManagerMongo = new ProductManagerMongo();
 const CartManagerMongo = require('../dao/CartManagerMongo.js');
@@ -7,7 +8,7 @@ const cartManagerMongo = new CartManagerMongo();
 
 // Middleware para verificar el acceso público
 const publicAccess = (req, res, next) => {
-    if (req.session.user) {
+    if (req.isAuthenticated()) {
         return res.redirect('/');
     }
     next();
@@ -15,17 +16,16 @@ const publicAccess = (req, res, next) => {
 
 // Middleware para verificar el acceso privado
 const privateAccess = (req, res, next) => {
-  if (!req.session.user) {
-      return res.redirect('/login');
-  }
-  next();
+    if (!req.isAuthenticated()) {
+        return res.redirect('/login');
+    }
+    next();
 }
 
 // Ruta principal
 router.get('/', privateAccess, (req, res) => {
-    res.render('home', { user: req.session.user });  // Asegúrate de tener configurada esta vista en tu motor de plantillas
+    res.render('home', { user: req.user });  
 });
-
 
 router.get('/logout', (req, res) => {
   // Destruir la sesión
@@ -40,6 +40,7 @@ router.get('/logout', (req, res) => {
   });
 });
 
+
 router.get('/register', publicAccess, (req, res) => {
     res.render('register');
 });
@@ -47,6 +48,10 @@ router.get('/register', publicAccess, (req, res) => {
 router.get('/login', publicAccess, (req, res) => {
     res.render('login');
 });
+router.get('/resetPassword', publicAccess , (req, res) => {
+  res.render('resetPassword');
+})
+
 
 // Vista de chat
 router.get('/chat', privateAccess, (req, res) => {

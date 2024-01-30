@@ -1,7 +1,9 @@
-const { fileURLToPath } = require('url');
-const { dirname } = require('path');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
-module.exports = __dirname;
+const { fileURLToPath } = require("url");
+const bcrypt = require("bcrypt");
+
+const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+const validatePassword = (password, user) => bcrypt.compareSync(password, user.password);
+
+module.exports = { createHash, validatePassword };
