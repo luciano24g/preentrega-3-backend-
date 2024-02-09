@@ -1,17 +1,17 @@
-const express = require('express');
-const userModel = require('../dao/models/user.models.js');
-const { createHash } = require('../utils.js');
-const passport = require('passport');
+import express from 'express';
+
+import { createHash, validatePassword } from '../utils.js';
+import passport from 'passport';
 
 const router = express.Router();
 
 router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), async (req, res) => {
-    res.send({ status: 'success', message: 'User registrado' });
+    res.send({ status: 'success', message: 'Usuario registrado' });
 });
 
 router.get('/failregister', async (req, res) => {
     console.log('Fallo el registro');
-    res.send({ error: 'fallo en el registro' });
+    res.send({ error: 'Fallo en el registro' });
 });
 
 router.post('/login', passport.authenticate('login', { failureRedirect: '/api/session/faillogin' }), async (req, res) => {
@@ -26,7 +26,7 @@ router.post('/login', passport.authenticate('login', { failureRedirect: '/api/se
 });
 
 router.get('/faillogin', (req, res) => {
-    res.send({ error: 'fail login' });
+    res.send({ error: 'Fallo en el inicio de sesión' });
 });
 
 router.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => {});
@@ -41,7 +41,7 @@ router.get('/logout', (req, res) => {
         if (err) {
             return res.status(500).send({
                 status: 'error',
-                error: 'No se pudo desloguear',
+                error: 'No se pudo cerrar la sesión',
             });
         }
         res.redirect('/login');
@@ -60,7 +60,7 @@ router.post('/restartPassword', async (req, res) => {
     if (!user) {
         return res.status(400).send({
             status: 'error',
-            message: 'No existe el usuario',
+            message: 'El usuario no existe',
         });
     }
     const newHashPassword = createHash(password);
@@ -68,8 +68,8 @@ router.post('/restartPassword', async (req, res) => {
     await userModel.updateOne({ _id: user._id }, { $set: { password: newHashPassword } });
     res.send({
         status: 'success',
-        message: 'contraseña restaurada',
+        message: 'Contraseña restaurada',
     });
 });
 
-module.exports = router;
+export default router;

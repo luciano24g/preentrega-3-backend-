@@ -8,9 +8,9 @@ form.addEventListener("submit", e =>{
     
     fetch("/api/sessions/restartPassword", {
         method: "POST",
-        body:JSON.stringify(obj),
+        body: JSON.stringify(obj),
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type": "application/json"
         }
     }).then(result=>{
         if(result.status === 200){
@@ -20,6 +20,4 @@ form.addEventListener("submit", e =>{
             console.log(result);
         }
     })
-
-
-})
+});

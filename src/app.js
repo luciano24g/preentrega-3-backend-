@@ -1,19 +1,27 @@
-const express = require('express');
-const { engine } = require('express-handlebars');
-const http = require('http');
-const path = require('path');
-const dbConnection = require('./db.js');
-const viewsRouter = require('./routes/viewsRouter');
-const { router: productsRouter } = require('./routes/productRouter');
-const Message = require('./dao/models/Message');
-const socketIo = require('socket.io');
-const messageRouter = require('./routes/messageRouter');
-const session = require('express-session');
-const sessionRouter = require('./routes/sessions.router.js');
-const cartRouter = require('./routes/cartRouter.js');
-const passport = require('passport');
-const inicializePassport = require('./dao/passport.config.js');
-const crypto = require('crypto');
+import express from 'express';
+import { engine } from 'express-handlebars';
+import http from 'http';
+import path from 'path';
+import dbConnection from './db.js';
+import viewsRouter from './routes/viewsRouter.js';
+import productsRouter from './routes/productRouter.js';
+import Message from './persistencia/Message.js';
+import { Server as socketIo } from 'socket.io'; // Importa Server como socketIo
+import messageRouter from './routes/messageRouter.js';
+import session from 'express-session';
+import sessionRouter from './routes/sessions.router.js';
+import cartRouter from './routes/cartRouter.js';
+import passport from 'passport';
+import inicializePassport from './managers/passport.config.js';
+import crypto from 'crypto';
+
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const PORT = 8080;
 const app = express();
@@ -59,7 +67,7 @@ app.use('/api/sessions', sessionRouter);
 app.use("/api/carts", cartRouter);
 
 // Configuración de Socket.IO
-const io = socketIo(httpServer);
+const io = new socketIo(httpServer); // Crea un nuevo servidor de socket con 'socketIo'
 app.set('socketio', io);
 
 io.on('connection', (socket) => {

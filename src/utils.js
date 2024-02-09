@@ -1,9 +1,6 @@
+import { hashSync, compareSync, genSaltSync } from 'bcrypt';
 
+const createHash = (password) => hashSync(password, genSaltSync(10));
+const validatePassword = (password, user) => compareSync(password, user.password);
 
-const { fileURLToPath } = require("url");
-const bcrypt = require("bcrypt");
-
-const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-const validatePassword = (password, user) => bcrypt.compareSync(password, user.password);
-
-module.exports = { createHash, validatePassword };
+export { createHash, validatePassword };

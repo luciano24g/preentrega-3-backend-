@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2");
+import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const productSchema = new mongoose.Schema({
     tipo: {
         type: String,
-        required: true  // Corregir el nombre de la propiedad
+        required: true
     },
     nombre: {
         type: String,
@@ -26,5 +26,5 @@ const productSchema = new mongoose.Schema({
 
 productSchema.plugin(mongoosePaginate);
 
-const Product = mongoose.model("Product", productSchema);
-module.exports = Product;
+const Product = mongoose.model('Product', productSchema);
+export default Product;

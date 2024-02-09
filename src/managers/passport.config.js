@@ -1,14 +1,13 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const GitHubStrategy = require("passport-github2").Strategy;
-
-const userModel = require("./models/user.models.js");
-const { createHash, validatePassword } = require("../utils.js");
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import GitHubStrategy from "passport-github2";
+import userModel from "../persistencia/user.models.js";
+import { createHash, validatePassword } from "../utils.js";
 
 const inicializePassport = () => {
     passport.use(
         "register",
-        new LocalStrategy(
+        new LocalStrategy.Strategy(
             { passReqToCallback: true, usernameField: "email" },
             async (req, username, password, done) => {
                 const { first_name, last_name, email, age } = req.body;
@@ -36,7 +35,7 @@ const inicializePassport = () => {
 
     passport.use(
         "login",
-        new LocalStrategy(
+        new LocalStrategy.Strategy(
             { usernameField: "email" },
             async (username, password, done) => {
                 try {
@@ -66,7 +65,7 @@ const inicializePassport = () => {
 
     passport.use(
         "github",
-        new GitHubStrategy(
+        new GitHubStrategy.Strategy(
             {
                 clientID: "64cd26e2ca23f97107aa",
                 clientSecret: "e1fdf7910a09d37721cb4daae8b40baefc8e601f",
@@ -104,4 +103,4 @@ const inicializePassport = () => {
     );
 };
 
-module.exports = inicializePassport;
+export default inicializePassport;
