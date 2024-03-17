@@ -1,4 +1,4 @@
-// cartService.js
+// CartService.js
 
 import CartManagerMongo from '../managers/CartManagerMongo.js';
 
@@ -27,6 +27,7 @@ export const createCart = async () => {
         throw error;
     }
 };
+
 export const updateCart = async (cid, updatedCartData) => {
     try {
         // Aquí implementa la lógica para actualizar el carrito usando el cartManager apropiado

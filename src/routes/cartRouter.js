@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import * as CartController from '../controller/CartController.js';
+import * as cartController from '../controller/CartController.js'; // Cambia CartController a cartController.js
 
 const router = Router();
 
-router.get('/', CartController.getCarts);
-router.get('/:cid', CartController.getCartByID); // Cambia getCartById a getCartByID
-router.post('/', CartController.createCart);
-router.post('/:cid/product/:pid', CartController.addProductToCart);
-router.put('/:cid', CartController.updateCart);
-router.delete('/:cid', CartController.deleteCart);
+router.get('/', cartController.getCarts);
+router.get('/:cid', cartController.getCartByID); // Cambia getCartById a getCartByID y CartController a cartController
+router.post('/', cartController.createCart);
+router.post('/:cid/product/:pid', cartController.addProductToCart);
+router.put('/:cid', cartController.updateCart);
+router.delete('/:cid', cartController.deleteCart);
 
 export default router;

@@ -1,6 +1,7 @@
-// cartController.js
+// CartController.js
 
 import * as CartService from '../service/cartService.js';
+import TicketService from '../service/ticketService.js'; // Importa el servicio de tickets
 
 export const getCarts = async (req, res, next) => {
     try {
@@ -46,6 +47,7 @@ export const addProductToCart = async (req, res, next) => {
         res.status(500).json({ status: "error", message: "Error al agregar producto al carrito" });
     }
 };
+
 export const updateCart = async (req, res, next) => {
     const cid = req.params.cid;
     const updatedCartData = req.body; // Datos actualizados del carrito
@@ -71,3 +73,23 @@ export const deleteCart = async (req, res, next) => {
         res.status(500).json({ status: "error", message: `Error al eliminar el carrito con ID ${cid}` });
     }
 };
+
+// Generar ticket de compra
+export const generatePurchaseTicket = async (req, res, next) => {
+    const cid = req.params.cid;
+    const purchaser = req.user.email; // O cualquier método para obtener el usuario que realiza la compra
+    try {
+        const cart = await CartService.getCartByID(cid);
+        if (!cart) {
+            return res.status(404).json({ status: "error", message: `Carrito con ID ${cid} no encontrado` });
+        }
+
+        // Generar ticket de compra
+        const ticket = await TicketService.generateTicket(cart, purchaser);
+        res.status(200).json({ status: "success", message: "Ticket de compra generado con éxito", ticket });
+    } catch (error) {
+        console.error(`Error al generar ticket de compra para el carrito con ID ${cid}:`, error.message);
+        res.status(500).json({ status: "error", message: `Error al generar ticket de compra para el carrito con ID ${cid}` });
+    }
+};
+

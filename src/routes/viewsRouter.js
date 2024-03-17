@@ -48,6 +48,7 @@ router.get('/register', publicAccess, (req, res) => {
 router.get('/login', publicAccess, (req, res) => {
     res.render('login');
 });
+
 router.get('/resetPassword', publicAccess , (req, res) => {
     res.render('resetPassword');
 })

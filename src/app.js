@@ -1,7 +1,7 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
 import http from 'http';
-import path from 'path';
+import path, { dirname } from 'path'; // Importa 'dirname' de 'path'
 import dbConnection from './db.js';
 import viewsRouter from './routes/viewsRouter.js';
 import productsRouter from './routes/productRouter.js';
@@ -14,16 +14,13 @@ import cartRouter from './routes/cartRouter.js';
 import passport from 'passport';
 import inicializePassport from './managers/passport.config.js';
 import crypto from 'crypto';
+import dotenv from 'dotenv'; // Importa el paquete dotenv
+import { fileURLToPath } from 'url'; // Importa 'fileURLToPath'
 
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
+const PORT = process.env.PORT || 8080; // Utiliza la variable de entorno para el puerto o un valor predeterminado
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const PORT = 8080;
 const app = express();
 const httpServer = http.createServer(app);
 
@@ -49,6 +46,10 @@ app.engine('.handlebars', engine({
     allowProtoPropertiesByDefault: true,
   },
 }));
+
+// Obtiene la ruta del directorio actual utilizando 'fileURLToPath' y 'dirname'
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
