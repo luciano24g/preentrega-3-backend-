@@ -1,12 +1,14 @@
-import { Router } from 'express';
+// productRouter.js
+
+import express from 'express';
 import * as ProductController from '../controller/ProductController.js';
 
-const router = Router();
+const router = express.Router();
 
 router.get('/', ProductController.getProducts);
+router.get('/:id', ProductController.getProductById);
 router.post('/', ProductController.createProduct);
-router.post('/:cartId/add-product/:productId', ProductController.addProductToCart); // Asegúrate de que addProductToCart esté importado y definido correctamente en ProductController.js
-router.put('/:pid', ProductController.updateProduct);
+router.put('/:id', ProductController.updateProduct);
 router.delete('/:id', ProductController.deleteProduct);
 
 export default router;

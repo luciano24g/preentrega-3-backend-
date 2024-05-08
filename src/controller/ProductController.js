@@ -1,65 +1,59 @@
-// productController.js
+// ProductController.js
+import ProductManager from "../managers/productManagerMongo.js";
 
-import * as ProductService from '../service/productService.js';
+const productManager = new ProductManager();
 
-export const getProducts = async (req, res, next) => {
-    const { limit, page, sort, query } = req.query;
+export const getProducts = async (req, res) => {
     try {
-        const products = await ProductService.getProducts({ limit, page, sort, query });
-        res.status(200).json({ status: "success", products });
+        const { page, limit, sort, query } = req.query;
+        const products = await productManager.getProducts({ page, limit, sort, query }); // Corrección aquí
+        res.status(200).json(products);
     } catch (error) {
-        console.error('Error al obtener productos:', error.message);
+        console.error('Error al obtener productos:', error);
         res.status(500).json({ status: "error", message: "Error al obtener productos" });
     }
 };
-
-export const getDistinctTipos = async (req, res, next) => {
+export const getProductById = async (req, res) => {
     try {
-        const tipos = await ProductService.getDistinctTipos();
-        res.status(200).json({ status: "success", tipos });
+        const { id } = req.params;
+        const product = await productManager.getById(id);
+        res.status(200).json(product);
     } catch (error) {
-        console.error('Error al obtener tipos de productos:', error.message);
-        res.status(500).json({ status: "error", message: "Error al obtener tipos de productos" });
+        console.error('Error al obtener el producto:', error);
+        res.status(500).json({ status: "error", message: "Error al obtener el producto" });
     }
 };
 
-export const createProduct = async (req, res, next) => {
-    const productData = req.body;
+export const createProduct = async (req, res) => {
     try {
-        const newProduct = await ProductService.addProduct(productData);
-        res.status(201).json({ status: "success", message: "Producto creado con éxito", newProduct });
+        const productData = req.body;
+        const newProduct = await productManager.add(productData);
+        res.status(201).json(newProduct);
     } catch (error) {
-        console.error('Error al crear producto:', error.message);
-        res.status(500).json({ status: "error", message: "Error al crear producto" });
+        console.error('Error al crear el producto:', error);
+        res.status(500).json({ status: "error", message: "Error al crear el producto" });
     }
 };
 
-export const updateProduct = async (req, res, next) => {
-    const productId = req.params.pid;
-    const updatedData = req.body;
+export const updateProduct = async (req, res) => {
     try {
-        const updatedProduct = await ProductService.updateProduct(productId, updatedData);
-        res.status(200).json({ status: "success", message: "Producto actualizado con éxito", updatedProduct });
+        const { id } = req.params;
+        const updatedData = req.body;
+        const updatedProduct = await productManager.update(id, updatedData);
+        res.status(200).json(updatedProduct);
     } catch (error) {
-        console.error(`Error al actualizar producto con ID ${productId}:`, error.message);
-        res.status(500).json({ status: "error", message: `Error al actualizar producto con ID ${productId}` });
+        console.error(`Error al actualizar el producto: ${error}`);
+        res.status(500).json({ status: "error", message: `Error al actualizar el producto: ${error}` });
     }
 };
 
-export const deleteProduct = async (req, res, next) => {
-    const productId = req.params.id;
+export const deleteProduct = async (req, res) => {
     try {
-        await ProductService.deleteProduct(productId);
-        res.status(200).json({ status: "success", message: "Producto eliminado con éxito" });
+        const { id } = req.params;
+        await productManager.delete(id);
+        res.status(200).json({ message: "Producto eliminado con éxito" });
     } catch (error) {
-        console.error(`Error al eliminar producto con ID ${productId}:`, error.message);
-        res.status(500).json({ status: "error", message: `Error al eliminar producto con ID ${productId}` });
+        console.error(`Error al eliminar el producto: ${error}`);
+        res.status(500).json({ status: "error", message: `Error al eliminar el producto: ${error}` });
     }
 };
-
-// Definición de la función addProductToCart
-export const addProductToCart = async (req, res, next) => {
-    // Código para agregar un producto al carrito
-};
-
-

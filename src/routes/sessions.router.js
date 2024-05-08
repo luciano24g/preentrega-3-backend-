@@ -1,75 +1,24 @@
 import express from 'express';
-
-import { createHash, validatePassword } from '../utils.js';
 import passport from 'passport';
+import SessionController from '../controller/sessionController.js';
 
 const router = express.Router();
+const sessionController = new SessionController();
 
-router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), async (req, res) => {
-    res.send({ status: 'success', message: 'Usuario registrado' });
-});
+router.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), sessionController.register);
 
-router.get('/failregister', async (req, res) => {
-    console.log('Fallo el registro');
-    res.send({ error: 'Fallo en el registro' });
-});
+router.get('/failregister', sessionController.failRegister);
 
-router.post('/login', passport.authenticate('login', { failureRedirect: '/api/session/faillogin' }), async (req, res) => {
-    // Si llega aquí, significa que la autenticación fue exitosa
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        email: req.user.email,
-    };
-    res.send({ status: 'success', payload: req.user });
-});
+router.post('/login', passport.authenticate('login', { failureRedirect: '/api/session/faillogin' }), sessionController.login);
 
-router.get('/faillogin', (req, res) => {
-    res.send({ error: 'Fallo en el inicio de sesión' });
-});
+router.get('/faillogin', sessionController.failLogin);
 
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => {});
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }), sessionController.github);
 
-router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), async (req, res) => {
-    req.session.user = req.user;
-    res.redirect('/');
-});
+router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), sessionController.githubCallback);
 
-router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).send({
-                status: 'error',
-                error: 'No se pudo cerrar la sesión',
-            });
-        }
-        res.redirect('/login');
-    });
-});
+router.get('/logout', sessionController.logout);
 
-router.post('/restartPassword', async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).send({
-            status: 'error',
-            message: 'Datos incorrectos',
-        });
-    }
-    const user = await userModel.findOne({ email });
-    if (!user) {
-        return res.status(400).send({
-            status: 'error',
-            message: 'El usuario no existe',
-        });
-    }
-    const newHashPassword = createHash(password);
-
-    await userModel.updateOne({ _id: user._id }, { $set: { password: newHashPassword } });
-    res.send({
-        status: 'success',
-        message: 'Contraseña restaurada',
-    });
-});
+router.post('/restartPassword', sessionController.restartPassword);
 
 export default router;

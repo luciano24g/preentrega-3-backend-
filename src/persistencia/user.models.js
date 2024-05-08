@@ -7,7 +7,9 @@ const schema = new mongoose.Schema({
     last_name: String,
     email: String,
     age: Number,
-    password: String
+    password: String,
+    role: { type: String, enum: ['admin', 'user', 'premium'], default: 'user' },
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' } // Referencia al carrito del usuario
 });
 
 const userModel = mongoose.model(collection, schema);

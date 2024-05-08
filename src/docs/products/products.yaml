@@ -1,0 +1,93 @@
+openapi: 3.0.1
+info:
+  title: Productos API
+  version: 1.0.0
+  description: Especificaciones de la API de productos
+
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los productos
+      responses:
+        '200':
+          description: Éxito. Devuelve la lista de productos.
+    post:
+      summary: Crear un nuevo producto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Producto creado correctamente
+        '400':
+          description: Error en la solicitud
+
+  /api/products/{id}:
+    get:
+      summary: Obtener un producto por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del producto a obtener
+      responses:
+        '200':
+          description: Éxito. Devuelve el producto solicitado.
+        '404':
+          description: Producto no encontrado
+    put:
+      summary: Actualizar un producto existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del producto a actualizar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+        '404':
+          description: Producto no encontrado
+    delete:
+      summary: Eliminar un producto por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del producto a eliminar
+      responses:
+        '204':
+          description: Producto eliminado correctamente
+        '404':
+          description: Producto no encontrado
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: double
+      required:
+        - name
+        - price

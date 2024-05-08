@@ -1,0 +1,56 @@
+openapi: 3.0.1
+info:
+  title: Carrito API
+  version: 1.0.0
+  description: Especificaciones de la API del carrito de compras
+
+paths:
+  /api/cart:
+    get:
+      summary: Obtener el contenido del carrito de compras
+      responses:
+        '200':
+          description: Éxito. Devuelve el contenido del carrito.
+    post:
+      summary: Agregar un producto al carrito de compras
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+      responses:
+        '200':
+          description: Producto agregado correctamente al carrito
+        '400':
+          description: Error en la solicitud
+
+  /api/cart/{id}:
+    delete:
+      summary: Eliminar un producto del carrito de compras por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del producto a eliminar del carrito
+      responses:
+        '204':
+          description: Producto eliminado correctamente del carrito
+        '404':
+          description: Producto no encontrado en el carrito
+
+components:
+  schemas:
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          minimum: 1
+      required:
+        - productId
+        - quantity

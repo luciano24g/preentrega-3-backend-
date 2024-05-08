@@ -98,56 +98,69 @@
     </style>
 </head>
 
+
 <body>
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/chat">Chat</a></li>
             <li><a href="/cart">Carrito</a></li>
-             <li><a href="/products">productos</a></li>
-                 <li><a href="/logout">Cerrar sesión</a></li>
+            <li><a href="/products">Productos</a></li>
+            <li><a href="/logout">Cerrar sesión</a></li>
         </ul>
     </nav>
 
-
-
     <h1>Productos</h1>
 
- <select id="categoryFilter">
-    <option value="all">Todos</option>
-    <option value="buzo">Buzos</option>
-    <option value="zapatillas">Zapatillas</option>
-    <option value="remera">Remeras</option>
-    <option value="gorra">Gorras</option>
-  </select>
-<!-- Contenedor para los productos -->
-<div id="productList">
-    {{#each products}}
+    <!-- Selector de categoría -->
+    <select id="categoryFilter">
+        <option value="all">Todos</option>
+        <option value="buzo">Buzos</option>
+        <option value="zapatillas">Zapatillas</option>
+        <option value="remera">Remeras</option>
+        <option value="gorra">Gorras</option>
+    </select>
+
+    <!-- Contenedor para los productos -->
+    <div id="productList">
+        {{#each products}}
         <div class="product-card" data-tipo="{{tipo}}">
             <h2>{{nombre}}</h2>
             <p>{{descripcion}}</p>
             <p>Precio: ${{precio}}</p>
             <p>Stock: {{stock}}</p>
-            <!-- Botón para agregar al carrito -->
-           <button class="add-to-cart-button" data-product-id="{{_id}}">Agregar al carrito</button>
-
-            <!-- Añade más detalles si es necesario -->
+            <!-- Formulario para agregar al carrito -->
+      <form action="/api/carts/product/{{this.id}}" method="post">
+        <input type="hidden" name="product" value="{{this.id}}">
+        <label for="quantity">Cantidad:</label>
+        <select id="quantity" name="quantity">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+        <button type="submit" value="Agregar al Carrito">Agregar al carrito<i class="bi bi-cart"></i></button>
+      </form>
         </div>
-    {{/each}}
-</div>
-<div>
-    Página:
-    <ul class="pagination">
-        {{#each pages}}
-            <li class="pagination-item">
-                <a href="/products?page={{this}}" class="pagination-link {{#if (eq ../currentPage this)}}active{{/if}}">{{this}}</a>
-            </li>
         {{/each}}
-    </ul>
-</div>
+    </div>
 
-    <script src="/js/products.js"></script> 
-    
+    <div class="pagination">
+        {{#if hasPrevPage}}
+        <a href="/products?page={{prevPage}}">Anterior</a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+        <a href="/products?page={{nextPage}}">Siguiente</a>
+        {{/if}}
+    </div>
+
+    <script src="/js/products.js"></script>
+
 </body>
 
 </html>

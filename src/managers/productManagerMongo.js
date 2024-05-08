@@ -1,8 +1,5 @@
-// productManagerMongo.js
-
 import Product from '../persistencia/Product.js';
 import mongoosePaginate from 'mongoose-paginate-v2';
-
 class ProductManagerMongo {
     constructor() {
         // Configurar paginate para Product
