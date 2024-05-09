@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "src/app.js", // Ruta al punto de entrada de tu aplicación
+        "use": "@vercel/node" // Especifica el uso de Vercel para Node.js
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)", // Ruta de tus endpoints de API
+        "dest": "src/app.js" // Punto de entrada de la API
+      },
+      {
+        "src": "/(.*)", // Ruta de tu aplicación principal
+        "dest": "src/app.js" // Punto de entrada de la aplicación principal
+      }
+    ]
+  }
+  
